@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.forsquare_android_vternovoi.MapFragment;
-import com.forsquare_android_vternovoi.RevenueListFragment;
+import com.forsquare_android_vternovoi.fragments.MapFragment;
+import com.forsquare_android_vternovoi.fragments.RevenueListFragment;
 
 /**
  * Created by valentin on 09.12.15.

@@ -28,12 +28,6 @@ public class Item__ {
     @SerializedName("height")
     @Expose
     private Long height;
-    @SerializedName("user")
-    @Expose
-    private User user;
-    @SerializedName("visibility")
-    @Expose
-    private String visibility;
 
     /**
      * @return The id
@@ -117,34 +111,6 @@ public class Item__ {
      */
     public void setHeight(Long height) {
         this.height = height;
-    }
-
-    /**
-     * @return The user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * @param user The user
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    /**
-     * @return The visibility
-     */
-    public String getVisibility() {
-        return visibility;
-    }
-
-    /**
-     * @param visibility The visibility
-     */
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
     }
 
     @Override
