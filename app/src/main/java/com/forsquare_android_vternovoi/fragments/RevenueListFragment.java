@@ -1,4 +1,4 @@
-package com.forsquare_android_vternovoi;
+package com.forsquare_android_vternovoi.fragments;
 
 //import android.app.LoaderManager;
 
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.forsquare_android_vternovoi.R;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
@@ -38,7 +39,6 @@ public class RevenueListFragment extends Fragment {
     private final static String TAG = "RevenueListFragment";
     public static VenueResponse venueResponse;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private RecyclerAdapter recyclerAdapter;
     //
 
@@ -88,7 +88,7 @@ public class RevenueListFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerAdapter = new RecyclerAdapter(venueResponse);

@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.forsquare_android_vternovoi.RevenueListFragment;
+import com.forsquare_android_vternovoi.fragments.RevenueListFragment;
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
 import com.forsquare_android_vternovoi.models.VenueResponse;
@@ -110,14 +110,17 @@ public class WebService extends Service {
                 // executing on executor
                 try {
                     // make retrofit synchronous web request
+
                     WebInterface client = FoursquareService.createService(WebInterface.class);
+                    // TODO: 11.12.15 make web client a Singleton object
+
                     Call<VenueResponse> call = client.exploreVenues(parametersMap);
                     resultVenueResponse = call.execute().body();
                     // sync write to db
 
                     // eventbus.post(event
                     Log.i("executor", "result is null: " + (resultVenueResponse == null));
-                    RevenueListFragment.venueResponse = resultVenueResponse;
+                    RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
