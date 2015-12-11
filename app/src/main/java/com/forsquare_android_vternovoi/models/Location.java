@@ -6,9 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Location {
 
@@ -26,10 +23,6 @@ public class Location {
     @Expose
     private String city;
 
-
-    @SerializedName("formattedAddress")
-    @Expose
-    private List<String> formattedAddress = new ArrayList<String>();
 
     /**
      * @return The address
@@ -88,20 +81,6 @@ public class Location {
         this.city = city;
     }
 
-
-    /**
-     * @return The formattedAddress
-     */
-    public List<String> getFormattedAddress() {
-        return formattedAddress;
-    }
-
-    /**
-     * @param formattedAddress The formattedAddress
-     */
-    public void setFormattedAddress(List<String> formattedAddress) {
-        this.formattedAddress = formattedAddress;
-    }
 
     @Override
     public String toString() {

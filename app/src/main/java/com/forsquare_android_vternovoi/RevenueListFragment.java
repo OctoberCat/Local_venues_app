@@ -5,7 +5,6 @@ package com.forsquare_android_vternovoi;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
-import com.forsquare_android_vternovoi.loaders.VenueLoader;
 import com.forsquare_android_vternovoi.models.Item;
 import com.forsquare_android_vternovoi.models.VenueResponse;
 
@@ -29,17 +27,28 @@ import retrofit.Call;
 /**
  * Created by valentin on 09.12.15.
  */
-public class RevenueListFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<VenueResponse> {
+public class RevenueListFragment extends Fragment {
 
+    //predefined values for service
+    public static final String ll = "50.00,36.24";
+    public static final String radius = "1500";
+    public static final String limit = "50";
+    public static final String offset = "50";
+    public static final String venuePhotos = "1";
     private final static String TAG = "RevenueListFragment";
-    private VenueResponse venueResponse;
+    public static VenueResponse venueResponse;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerAdapter recyclerAdapter;
+    //
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Start service
+
+        //WebService.fetchVenues(getActivity(),ll,radius,limit,offset,venuePhotos);
+
         //getLoaderManager().initLoader(0, null, this).forceLoad(); //leave for this moment
         ////////////////////////////////
         //delete this after solving promblem with loaders
@@ -88,28 +97,4 @@ public class RevenueListFragment extends Fragment implements android.support.v4.
         return rootView;
     }
 
-
-    @Override
-    public Loader<VenueResponse> onCreateLoader(int id, Bundle args) {
-        Log.i(TAG, "inside onCreateLoader");
-        return new VenueLoader(getActivity());
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<VenueResponse> loader, VenueResponse data) {
-        Log.i(TAG, " load finished: " + data.getResponse().getGroups().get(0).getItems());
-        //todo check why never called
-        venueResponse = data;
-       /* // adapter refreshing
-        mAdapter.clear();
-        mAdapter.addAll(venueResponse);
-        // fire the event
-        mAdapter.notifyDataSetChanged();*/
-    }
-
-    @Override
-    public void onLoaderReset(Loader<VenueResponse> loader) {
-
-    }
 }

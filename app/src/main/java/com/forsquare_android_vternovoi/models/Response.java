@@ -23,9 +23,6 @@ public class Response {
     @SerializedName("totalResults")
     @Expose
     private Long totalResults;
-    @SerializedName("suggestedBounds")
-    @Expose
-    private SuggestedBounds suggestedBounds;
     @SerializedName("groups")
     @Expose
     private List<Group> groups = new ArrayList<Group>();
@@ -85,20 +82,6 @@ public class Response {
      */
     public void setTotalResults(Long totalResults) {
         this.totalResults = totalResults;
-    }
-
-    /**
-     * @return The suggestedBounds
-     */
-    public SuggestedBounds getSuggestedBounds() {
-        return suggestedBounds;
-    }
-
-    /**
-     * @param suggestedBounds The suggestedBounds
-     */
-    public void setSuggestedBounds(SuggestedBounds suggestedBounds) {
-        this.suggestedBounds = suggestedBounds;
     }
 
     /**

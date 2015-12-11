@@ -22,9 +22,6 @@ public class Venue {
     @Expose
     private Location location;
 
-    @SerializedName("verified")
-    @Expose
-    private Boolean verified;
     @SerializedName("stats")
     @Expose
     private Stats stats;
@@ -37,9 +34,9 @@ public class Venue {
     @SerializedName("ratingColor")
     @Expose
     private String ratingColor;
-    @SerializedName("hours")
-    @Expose
-    private Hours hours;
+    /*    @SerializedName("hours")
+        @Expose
+        private Hours hours;*/
     @SerializedName("photos")
     @Expose
     private Photos photos;
@@ -105,20 +102,6 @@ public class Venue {
 
 
     /**
-     * @return The verified
-     */
-    public Boolean getVerified() {
-        return verified;
-    }
-
-    /**
-     * @param verified The verified
-     */
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
-    }
-
-    /**
      * @return The stats
      */
     public Stats getStats() {
@@ -174,20 +157,20 @@ public class Venue {
         this.ratingColor = ratingColor;
     }
 
-    /**
+   /* *//**
      * @return The hours
-     */
+     *//*
     public Hours getHours() {
         return hours;
     }
 
-    /**
+    *//**
      * @param hours The hours
-     */
+     *//*
     public void setHours(Hours hours) {
         this.hours = hours;
     }
-
+*/
     /**
      * @return The photos
      */

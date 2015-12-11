@@ -34,7 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.itemList = results.getResponse().getGroups().get(0).getItems();
 
         for (Item item : itemList) {
-            Log.i("AdapterConstr", "items" + item.getVenue().getName());
+            Log.i("AdapterConstr", "items name test: " + item.getVenue().getName());
         }
 
     }

@@ -7,29 +7,12 @@ import com.google.gson.annotations.SerializedName;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
+//ok
 public class Contact {
 
-    @SerializedName("phone")
-    @Expose
-    private String phone;
     @SerializedName("formattedPhone")
     @Expose
     private String formattedPhone;
-
-    /**
-     * @return The phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone The phone
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
     /**
      * @return The formattedPhone
