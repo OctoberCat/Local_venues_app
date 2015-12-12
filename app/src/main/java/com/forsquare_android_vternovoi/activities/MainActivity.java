@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //init stuff
-        tabs.addTab(tabs.newTab().setText(placesTab));
-        tabs.addTab(tabs.newTab().setText(mapTab));
+        tabs.addTab(tabs.newTab().setText(placesTab).setIcon(R.drawable.ic_list_white_24dp));
+        tabs.addTab(tabs.newTab().setText(mapTab).setIcon(R.drawable.ic_explore_white_24dp));
 
         viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager()));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));

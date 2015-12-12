@@ -9,10 +9,13 @@ import android.util.Log;
 
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
+import com.forsquare_android_vternovoi.models.Item;
 import com.forsquare_android_vternovoi.models.VenueResponse;
+import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,12 +42,12 @@ public class WebService extends Service {
     public static final String EXTRAS_LIMIT = "limit";
     public static final String EXTRAS_OFFSET = "offset";
     public static final String EXTRAS_VENUEPHOTOS = "venuePhotos";
-
-
+    //for passing activity context to DB
+    static Context mContext;
     private VenueResponse resultVenueResponse;
     private ExecutorService executor;
     private Map<String, String> parametersMap;
-
+    //
 
     public static void fetchVenues(Context context, String ll, String radius, String limit, String offset, String venuesPhotos) {
         Intent intent = new Intent(context, WebService.class);
@@ -52,6 +55,8 @@ public class WebService extends Service {
 /*        intent.putExtra(EXTRAS_CLIENT_ID, CLIENT_ID_VALUE);
         intent.putExtra(EXTRAS_CLIENT_SECRET, CLIENT_SECRET_VALUE);
         intent.putExtra(EXTRAS_VERSION, VERSION_VALUE);*/
+
+        mContext = context.getApplicationContext();
         intent.putExtra(EXTRAS_LL, ll);
         intent.putExtra(EXTRAS_RADIUS, radius);
         intent.putExtra(EXTRAS_LIMIT, limit);
@@ -118,6 +123,13 @@ public class WebService extends Service {
 
                     // eventbus.post(event
                     Log.i("executor", "result is null: " + (resultVenueResponse == null));
+                    if (resultVenueResponse != null) {
+                        List<Item> itemList = resultVenueResponse.getResponse().getGroups().get(0).getItems();
+                        FoursquareDataSource dataSource = new FoursquareDataSource(mContext); //todo how to pass context?
+                        dataSource.open();
+                        dataSource.createVenues(itemList);
+                        dataSource.close();
+                    }
                     // RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
                 } catch (IOException e) {
                     e.printStackTrace();
