@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">forsquare_android_v.ternovoi</string>
+    <string name="app_name">forsquare_App_Ternovoi</string>
     <string name="imgDescr">VenuePic</string>
+    <string name="placesTab">Places</string>
+    <string name="mapTab">Map</string>
+    <string name="VenueNameSample">IT_cafe</string>
+    <string name="addressSample">проспект Правди, 10A</string>
+    <string name="ratingSample">9.5</string>
 </resources>

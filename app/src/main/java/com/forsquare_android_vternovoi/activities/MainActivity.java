@@ -5,7 +5,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,12 +14,12 @@ import com.forsquare_android_vternovoi.adapters.TabsAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-//todo 10.12 get reliable models
-// TODO: 09.12.15 manage response with Retrofit
+
 public class MainActivity extends AppCompatActivity implements TabListener {
 
     @Bind(R.id.pager)
     ViewPager viewPager;//todo ask about supp library and PageAdapter
+
 
     private ActionBar actionBar;
 
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements TabListener {
         ButterKnife.bind(this);
         //init stuff
 
-        setSupportActionBar(); // TODO: 11.12.15 TOOLBAR HERE
+        //setSupportActionBar(); // TODO: 11.12.15 TOOLBAR HERE
         actionBar = getActionBar();
         tabsAdapter = new TabsAdapter(getSupportFragmentManager());
         //

@@ -7,7 +7,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.forsquare_android_vternovoi.fragments.RevenueListFragment;
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
 import com.forsquare_android_vternovoi.models.VenueResponse;
@@ -120,7 +119,7 @@ public class WebService extends Service {
 
                     // eventbus.post(event
                     Log.i("executor", "result is null: " + (resultVenueResponse == null));
-                    RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
+                    // RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
