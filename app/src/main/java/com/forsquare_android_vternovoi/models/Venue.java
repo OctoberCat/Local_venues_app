@@ -171,6 +171,7 @@ public class Venue {
         this.hours = hours;
     }
 */
+
     /**
      * @return The photos
      */

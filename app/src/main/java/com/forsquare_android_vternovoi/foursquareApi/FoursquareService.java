@@ -25,6 +25,8 @@ public class FoursquareService {
         if (webInterface == null) {//changed to singleton
             Retrofit retrofit = builder.client(httpClient).build();
             return retrofit.create(serviceClass);
-        } else return webInterface;
+        } else {
+            return webInterface;
+        }
     }
 }

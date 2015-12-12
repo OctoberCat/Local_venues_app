@@ -12,12 +12,21 @@
         android:contentDescription="@string/imgDescr"
         android:src="@mipmap/ic_launcher" />
 
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/ratingSample"
+        android:textSize="45sp" />
 
     <TextView
         android:id="@+id/venueName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@id/rating"
         android:layout_toRightOf="@id/venuePhoto"
         android:text="@string/VenueNameSample"
         android:textSize="20sp" />
@@ -27,17 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/venueName"
+        android:layout_toLeftOf="@id/rating"
         android:layout_toRightOf="@id/venuePhoto"
+
         android:text="@string/addressSample"
         android:textSize="20sp" />
 
 
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/ratingSample"
-        android:textSize="45sp" />
 </RelativeLayout>

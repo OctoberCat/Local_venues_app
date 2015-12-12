@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.forsquare_android_vternovoi.R;
@@ -48,9 +49,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Venue venue = itemList.get(position).getVenue();
-        holder.name.setText(venue.getName());
-        holder.address.setText(venue.getLocation().getAddress());
+        holder.venueName.setText(venue.getName());
+        holder.streetAdr.setText(venue.getLocation().getAddress());
         holder.rating.setText(venue.getRating().toString());
+
 
     }
 
@@ -59,17 +61,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return itemList.size();
     }
 
+
     class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.venuePhoto)
+        ImageView venuePhoto;
         @Bind(R.id.venueName)
-        TextView name;
+        TextView venueName;
         @Bind(R.id.streetAdr)
-        TextView address;
+        TextView streetAdr;
         @Bind(R.id.rating)
         TextView rating;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
+
 }

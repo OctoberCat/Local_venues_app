@@ -111,7 +111,6 @@ public class WebService extends Service {
                     // make retrofit synchronous web request
 
                     WebInterface client = FoursquareService.createService(WebInterface.class);
-                    // TODO: 11.12.15 make web client a Singleton object
 
                     Call<VenueResponse> call = client.exploreVenues(parametersMap);
                     resultVenueResponse = call.execute().body();
