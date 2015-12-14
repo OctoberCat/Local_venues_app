@@ -127,7 +127,10 @@ public class WebService extends Service {
                         List<Item> itemList = resultVenueResponse.getResponse().getGroups().get(0).getItems();
                         FoursquareDataSource dataSource = new FoursquareDataSource(mContext); //todo how to pass context?
                         dataSource.open();
+
+                        dataSource.dropAndUpgrade();//drop previous results
                         dataSource.createVenues(itemList);
+
                         dataSource.close();
                     }
                     // RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
@@ -137,5 +140,8 @@ public class WebService extends Service {
             }
         });
 
+
     }
+
+
 }

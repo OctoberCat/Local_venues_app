@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.forsquare_android_vternovoi.R;
 import com.forsquare_android_vternovoi.models.Item;
 import com.forsquare_android_vternovoi.models.Venue;
-import com.forsquare_android_vternovoi.models.VenueResponse;
 
 import java.util.List;
 
@@ -24,20 +23,24 @@ import butterknife.ButterKnife;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
 
+    List<Venue> venueList;
     private List<Item> itemList;
 
 
-    public RecyclerAdapter(VenueResponse results) {//retrieve itemList only, think about it
-
-/*        List<Group>  groupList = results.getResponse().getGroups();
-        Group group =  groupList.get(0);
-        List<Item> items = group.getItems();*/
+/*    public RecyclerAdapter(VenueResponse results) {//retrieve itemList only, think about it
         this.itemList = results.getResponse().getGroups().get(0).getItems();
 
         for (Item item : itemList) {
             Log.i("AdapterConstr", "items name test: " + item.getVenue().getName());
         }
 
+    }*/
+
+    public RecyclerAdapter(List<Venue> venueList) {
+        this.venueList = venueList;
+        for (Venue venue : venueList) {
+            Log.i("AdapterConstr", "venues name test: " + venue.getName());
+        }
     }
 
     @Override
@@ -48,7 +51,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Venue venue = itemList.get(position).getVenue();
+/*        Venue venue = itemList.get(position).getVenue();
+        holder.venueName.setText(venue.getName());
+        holder.streetAdr.setText(venue.getLocation().getAddress());
+        holder.rating.setText(venue.getRating().toString());*/
+
+        Venue venue = venueList.get(position);
         holder.venueName.setText(venue.getName());
         holder.streetAdr.setText(venue.getLocation().getAddress());
         holder.rating.setText(venue.getRating().toString());
@@ -58,7 +66,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return venueList.size();
     }
 
 

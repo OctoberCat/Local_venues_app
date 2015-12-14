@@ -2,28 +2,24 @@ package com.forsquare_android_vternovoi.fragments;
 
 //import android.app.LoaderManager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.forsquare_android_vternovoi.R;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
-import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
-import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
-import com.forsquare_android_vternovoi.models.Item;
+import com.forsquare_android_vternovoi.models.Venue;
 import com.forsquare_android_vternovoi.models.VenueResponse;
+import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
+import com.forsquare_android_vternovoi.services.WebService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import retrofit.Call;
 
 /**
  * Created by valentin on 09.12.15.
@@ -38,6 +34,7 @@ public class RevenueListFragment extends Fragment {
     public static final String venuePhotos = "1";
     private final static String TAG = "RevenueListFragment";
     public static VenueResponse venueResponse;
+    List<Venue> venuesResultList;
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
     //
@@ -45,14 +42,22 @@ public class RevenueListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (isOnline()) {
         //Start service
+            WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
+        }
 
-        //WebService.fetchVenues(getActivity(),ll,radius,limit,offset,venuePhotos);
+        //
+        FoursquareDataSource dataSource = new FoursquareDataSource(getActivity()); //todo how to pass context?
+        dataSource.open();
+        venuesResultList = dataSource.getAllVenues();
+        dataSource.close();
 
-        //getLoaderManager().initLoader(0, null, this).forceLoad(); //leave for this moment
+
         ////////////////////////////////
         //delete this after solving promblem with loaders
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         //
 
@@ -78,7 +83,7 @@ public class RevenueListFragment extends Fragment {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
+        }*/
         ////////////////////////////////
     }
 
@@ -91,10 +96,16 @@ public class RevenueListFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerAdapter = new RecyclerAdapter(venueResponse);
-
+        //recyclerAdapter = new RecyclerAdapter(venueResponse);
+        recyclerAdapter = new RecyclerAdapter(venuesResultList);
         recyclerView.setAdapter(recyclerAdapter);
         return rootView;
+    }
+
+
+    boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 
 }
