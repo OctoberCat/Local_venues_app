@@ -1,11 +1,7 @@
-
 package com.forsquare_android_vternovoi.models;
-
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 public class Tip {
@@ -16,9 +12,15 @@ public class Tip {
     @SerializedName("text")
     @Expose
     private String text;
+    @SerializedName("type")
+    @Expose
+    private String type;
     @SerializedName("canonicalUrl")
     @Expose
     private String canonicalUrl;
+    @SerializedName("user")
+    @Expose
+    private User__ user;
 
     /**
      * @return The id
@@ -49,6 +51,20 @@ public class Tip {
     }
 
     /**
+     * @return The type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type The type
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
      * @return The canonicalUrl
      */
     public String getCanonicalUrl() {
@@ -62,9 +78,18 @@ public class Tip {
         this.canonicalUrl = canonicalUrl;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    /**
+     * @return The user
+     */
+    public User__ getUser() {
+        return user;
+    }
+
+    /**
+     * @param user The user
+     */
+    public void setUser(User__ user) {
+        this.user = user;
     }
 
 }

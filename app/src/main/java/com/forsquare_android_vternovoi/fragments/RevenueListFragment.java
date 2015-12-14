@@ -17,6 +17,7 @@ import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
 import com.forsquare_android_vternovoi.models.Venue;
 import com.forsquare_android_vternovoi.models.VenueResponse;
 import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
+import com.forsquare_android_vternovoi.services.EventBusVenues;
 import com.forsquare_android_vternovoi.services.WebService;
 
 import java.util.List;
@@ -29,8 +30,8 @@ public class RevenueListFragment extends Fragment {
     //predefined values for service
     public static final String ll = "50.00,36.24";
     public static final String radius = "1500";
-    public static final String limit = "50";
-    public static final String offset = "50";
+    public static final String limit = "10";
+    public static final String offset = "0";
     public static final String venuePhotos = "1";
     private final static String TAG = "RevenueListFragment";
     public static VenueResponse venueResponse;
@@ -42,49 +43,18 @@ public class RevenueListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        EventBusVenues.getInstance().register(this);
         if (isOnline()) {
         //Start service
             WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
         }
 
         //
-        FoursquareDataSource dataSource = new FoursquareDataSource(getActivity()); //todo how to pass context?
+        FoursquareDataSource dataSource = new FoursquareDataSource(getActivity());
         dataSource.open();
         venuesResultList = dataSource.getAllVenues();
         dataSource.close();
 
-
-        ////////////////////////////////
-        //delete this after solving promblem with loaders
-        /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        //
-
-        WebInterface client = FoursquareService.createService(WebInterface.class);
-        //until I don't have real parameters I will use predefined
-        Map<String, String> parametersMap = new HashMap<>();
-        parametersMap.put("client_id", WebInterface.CLIENT_ID);
-        parametersMap.put("client_secret", WebInterface.CLIENT_SECRET);
-        parametersMap.put("v", WebInterface.VERSION);
-        parametersMap.put(WebInterface.LL_PARAMETER, "50.0,36.2");
-        parametersMap.put(WebInterface.LIMIT_PARAMETER, "10");
-        parametersMap.put(WebInterface.OFFSET_PARAMETER, "10");
-        parametersMap.put(WebInterface.RADIUS_PARAMETER, "2000");
-        parametersMap.put(WebInterface.VENUEPHOTOS_PARAMETER, "1");
-
-        Call<VenueResponse> call = client.exploreVenues(parametersMap);
-        try {
-            venueResponse = call.execute().body();
-            List<Item> venueItems = venueResponse.getResponse().getGroups().get(0).getItems();
-            for (Item item : venueItems) {
-                Log.i("Check result", item.getVenue().getName());
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
-        ////////////////////////////////
     }
 
     @Override
@@ -108,4 +78,8 @@ public class RevenueListFragment extends Fragment {
         return cm.getActiveNetworkInfo() != null;
     }
 
+
+    void saveUserLocation() {
+
+    }
 }

@@ -125,7 +125,8 @@ public class WebService extends Service {
                     Log.i("executor", "result is null: " + (resultVenueResponse == null));
                     if (resultVenueResponse != null) {
                         List<Item> itemList = resultVenueResponse.getResponse().getGroups().get(0).getItems();
-                        FoursquareDataSource dataSource = new FoursquareDataSource(mContext); //todo how to pass context?
+                        Log.i("executor", "results quantity: " + itemList.size());
+                        FoursquareDataSource dataSource = new FoursquareDataSource(WebService.this);
                         dataSource.open();
 
                         dataSource.dropAndUpgrade();//drop previous results

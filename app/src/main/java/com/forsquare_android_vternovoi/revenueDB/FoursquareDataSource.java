@@ -18,8 +18,8 @@ import java.util.List;
  * Created by valentin on 11.12.15.
  */
 public class FoursquareDataSource {
+    private static FoursquareDBHelper dbHelper;
     private SQLiteDatabase database;
-    private FoursquareDBHelper dbHelper;
     private int version = 1;
 
     private String[] allColumnsVenues = {FoursquareDBHelper.COLUMN_ID, FoursquareDBHelper.COLUMN_NAME,
@@ -31,7 +31,9 @@ public class FoursquareDataSource {
             FoursquareDBHelper.COLUMN_CITY};
 
     public FoursquareDataSource(Context context) {
-        dbHelper = new FoursquareDBHelper(context);
+        if (dbHelper == null) {
+            dbHelper = new FoursquareDBHelper(context);
+        }
     }
 
     public void open() throws SQLException {
@@ -128,7 +130,13 @@ public class FoursquareDataSource {
         cursor.close();
         return null;
     }
-    //public Contact getContactById(){}
+
+/*
+    public long createTip(Tip tip) {
+        ContentValues values = new ContentValues();
+        values.put(FoursquareDBHelper.,tip.getText());
+
+    }*/
 
     private Venue cursorToVenue(Cursor cursor) {
         Venue venue = new Venue();

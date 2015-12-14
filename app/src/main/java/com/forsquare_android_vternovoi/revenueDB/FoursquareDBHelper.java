@@ -9,21 +9,6 @@ import android.util.Log;
  * Created by valentin on 09.12.15.
  */
 public class FoursquareDBHelper extends SQLiteOpenHelper {
-    //venues
- /*
-    private String id;
-    private String name;
-    private Contact contact;
-    private Location location;
-    private Stats stats;
-    private String url;
-    private Double rating;
-    private String ratingColor;
-    private Hours hours;
-    private Photos photos;
-    private FeaturedPhotos featuredPhotos;
-*/
-
 
     //venue not OK todo manage photos table
 
@@ -106,5 +91,6 @@ public class FoursquareDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + LOCATIONS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TIPS_TABLE_NAME);
         onCreate(db);
+        Log.i("onUpgrade()", "check creation");
     }
 }
