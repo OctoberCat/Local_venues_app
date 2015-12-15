@@ -17,13 +17,13 @@ import com.forsquare_android_vternovoi.R;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
 import com.forsquare_android_vternovoi.adapters.ScrollListener;
 import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
+import com.forsquare_android_vternovoi.eventBus.UpdateEvent;
 import com.forsquare_android_vternovoi.manager.DataManager;
 import com.forsquare_android_vternovoi.models.Venue;
 import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
 import com.forsquare_android_vternovoi.services.WebService;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -106,12 +106,24 @@ public class RevenueListFragment extends Fragment {
     }
 
     @Subscribe
-    public void getUpdatedVenues(ArrayList<Venue> venuesUpdateList) {
-        for (Venue venue : venuesUpdateList) {
+    public void getUpdatedVenues(UpdateEvent upd) {
+
+        for (Venue venue : upd.getVenueArrayList()) {
             Log.i("Event received test", "venue names: " + venue.getName());
         }
         //todo use venuesResultList = venuesUpdateList or adapter.update(venuesUpdateList)?
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBusVenues.getInstance().unregister(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // EventBusVenues.getInstance().register(this);
+    }
 }

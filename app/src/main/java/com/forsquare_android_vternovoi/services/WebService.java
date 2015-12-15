@@ -126,6 +126,8 @@ public class WebService extends Service {
                     if (resultVenueResponse != null) {
                         List<Item> itemList = resultVenueResponse.getResponse().getGroups().get(0).getItems();
                         Log.i("executor", "results quantity: " + itemList.size());
+
+
                         DataManager.getInstance(getApplicationContext()).updateVenuesDB(itemList, firstTimeFlag);
                     }
                     // RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus

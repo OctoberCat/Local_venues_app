@@ -3,10 +3,12 @@ package com.forsquare_android_vternovoi.manager;
 import android.content.Context;
 
 import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
+import com.forsquare_android_vternovoi.eventBus.UpdateEvent;
 import com.forsquare_android_vternovoi.models.Item;
 import com.forsquare_android_vternovoi.models.Venue;
 import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +52,7 @@ public class DataManager {
         }
         dataSource.persistVenues(retrievedList);
         venuesResultList = dataSource.getAllVenues();
-        EventBusVenues.getInstance().post(venuesResultList);
+        EventBusVenues.getInstance().post(new UpdateEvent((ArrayList<Venue>) venuesResultList));
         dataSource.close();
 
     }
