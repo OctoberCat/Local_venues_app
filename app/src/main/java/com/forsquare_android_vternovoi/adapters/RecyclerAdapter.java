@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.forsquare_android_vternovoi.R;
-import com.forsquare_android_vternovoi.models.Item;
 import com.forsquare_android_vternovoi.models.Venue;
 
 import java.util.List;
@@ -24,17 +23,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     List<Venue> venueList;
-    private List<Item> itemList;
 
-
-/*    public RecyclerAdapter(VenueResponse results) {//retrieve itemList only, think about it
-        this.itemList = results.getResponse().getGroups().get(0).getItems();
-
-        for (Item item : itemList) {
-            Log.i("AdapterConstr", "items name test: " + item.getVenue().getName());
-        }
-
-    }*/
 
     public RecyclerAdapter(List<Venue> venueList) {
         this.venueList = venueList;
@@ -51,17 +40,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-/*        Venue venue = itemList.get(position).getVenue();
-        holder.venueName.setText(venue.getName());
-        holder.streetAdr.setText(venue.getLocation().getAddress());
-        holder.rating.setText(venue.getRating().toString());*/
-
         Venue venue = venueList.get(position);
         holder.venueName.setText(venue.getName());
         holder.streetAdr.setText(venue.getLocation().getAddress());
         holder.rating.setText(venue.getRating().toString());
-
-
     }
 
     @Override
@@ -69,6 +51,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return venueList.size();
     }
 
+    void updateData(List<Venue> updateList) {//todo update data
+        venueList.clear();
+        venueList.addAll(updateList);
+        notifyDataSetChanged();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.venuePhoto)
@@ -85,5 +72,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             ButterKnife.bind(this, view);
         }
     }
-
 }

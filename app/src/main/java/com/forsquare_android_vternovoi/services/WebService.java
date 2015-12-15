@@ -9,9 +9,9 @@ import android.util.Log;
 
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
+import com.forsquare_android_vternovoi.manager.DataManager;
 import com.forsquare_android_vternovoi.models.Item;
 import com.forsquare_android_vternovoi.models.VenueResponse;
-import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,21 +42,16 @@ public class WebService extends Service {
     public static final String EXTRAS_LIMIT = "limit";
     public static final String EXTRAS_OFFSET = "offset";
     public static final String EXTRAS_VENUEPHOTOS = "venuePhotos";
+    //
+    boolean firstTimeFlag;
     //for passing activity context to DB
-    static Context mContext;
     private VenueResponse resultVenueResponse;
     private ExecutorService executor;
     private Map<String, String> parametersMap;
-    //
 
     public static void fetchVenues(Context context, String ll, String radius, String limit, String offset, String venuesPhotos) {
         Intent intent = new Intent(context, WebService.class);
         intent.setAction(ACTION_FETCH_VENUES);
-/*        intent.putExtra(EXTRAS_CLIENT_ID, CLIENT_ID_VALUE);
-        intent.putExtra(EXTRAS_CLIENT_SECRET, CLIENT_SECRET_VALUE);
-        intent.putExtra(EXTRAS_VERSION, VERSION_VALUE);*/
-
-        mContext = context.getApplicationContext();
         intent.putExtra(EXTRAS_LL, ll);
         intent.putExtra(EXTRAS_RADIUS, radius);
         intent.putExtra(EXTRAS_LIMIT, limit);
@@ -94,6 +89,9 @@ public class WebService extends Service {
         String venuePhotos = intent.getStringExtra(EXTRAS_VENUEPHOTOS);
         String limit = intent.getStringExtra(EXTRAS_LIMIT);
         String offset = intent.getStringExtra(EXTRAS_OFFSET);
+        Log.i("handle", "offset check " + offset);
+        //checking if this first web request by
+        firstTimeFlag = offset.equals("0");
         parametersMap = new HashMap<>();
         parametersMap.put(EXTRAS_CLIENT_ID, CLIENT_ID_VALUE);
         parametersMap.put(EXTRAS_CLIENT_SECRET, CLIENT_SECRET_VALUE);
@@ -118,21 +116,17 @@ public class WebService extends Service {
                     WebInterface client = FoursquareService.createService(WebInterface.class);
 
                     Call<VenueResponse> call = client.exploreVenues(parametersMap);
+
                     resultVenueResponse = call.execute().body();
                     // sync write to db
 
                     // eventbus.post(event
                     Log.i("executor", "result is null: " + (resultVenueResponse == null));
+                    Log.i("executor", "FLAG OFFSET " + firstTimeFlag);
                     if (resultVenueResponse != null) {
                         List<Item> itemList = resultVenueResponse.getResponse().getGroups().get(0).getItems();
                         Log.i("executor", "results quantity: " + itemList.size());
-                        FoursquareDataSource dataSource = new FoursquareDataSource(WebService.this);
-                        dataSource.open();
-
-                        dataSource.dropAndUpgrade();//drop previous results
-                        dataSource.createVenues(itemList);
-
-                        dataSource.close();
+                        DataManager.getInstance(getApplicationContext()).updateVenuesDB(itemList, firstTimeFlag);
                     }
                     // RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
                 } catch (IOException e) {

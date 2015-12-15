@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.forsquare_android_vternovoi.models.Contact;
 import com.forsquare_android_vternovoi.models.Item;
@@ -31,9 +32,9 @@ public class FoursquareDataSource {
             FoursquareDBHelper.COLUMN_CITY};
 
     public FoursquareDataSource(Context context) {
-        if (dbHelper == null) {
-            dbHelper = new FoursquareDBHelper(context);
-        }
+
+        dbHelper = FoursquareDBHelper.getInstance(context);
+
     }
 
     public void open() throws SQLException {
@@ -49,7 +50,7 @@ public class FoursquareDataSource {
     }//bad idea, change
 
 
-    public void createVenue(Item item) {
+    public void persistVenue(Item item) {
         Venue venue = item.getVenue();
         ContentValues values = new ContentValues();
         values.put(FoursquareDBHelper.COLUMN_ID, venue.getId());
@@ -59,14 +60,31 @@ public class FoursquareDataSource {
         values.put(FoursquareDBHelper.COLUMN_RATING, venue.getRating());
         values.put(FoursquareDBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
         long insertId = database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);
-        /*return null;*/ //MB return venue?
+        Log.i("Venue insertId: ", "" + insertId);
+        /*Cursor cursor = database.query(FoursquareDBHelper.VENUES_TABLE_NAME, allColumnsVenues,
+                FoursquareDBHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+        //cursor.moveToFirst();
+        return cursorToVenue(cursor);*/
+
     }
 
-    public void createVenues(List<Item> itemList) {
+    public ArrayList<Venue> persistVenues(List<Item> itemList) {
+        ArrayList<Venue> createdVenueList = new ArrayList<>();
+        database.beginTransaction();
         for (Item item : itemList) {
-            createVenue(item);
+            Venue venue = item.getVenue();
+            ContentValues values = new ContentValues();
+            values.put(FoursquareDBHelper.COLUMN_ID, venue.getId());
+            values.put(FoursquareDBHelper.COLUMN_NAME, venue.getName());
+            values.put(FoursquareDBHelper.COLUMN_CONTACT_ID, createContact(venue.getContact())); //retrieve ID and make a record
+            values.put(FoursquareDBHelper.COLUMN_LOCATION_ID, createLocation(venue.getLocation()));//
+            values.put(FoursquareDBHelper.COLUMN_RATING, venue.getRating());
+            values.put(FoursquareDBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
+            database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);
         }
-
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return createdVenueList;
     }
 
     public List<Venue> getAllVenues() {
