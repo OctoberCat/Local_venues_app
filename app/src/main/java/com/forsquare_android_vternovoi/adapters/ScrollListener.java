@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 /**
  * Created by valentin on 15.12.15.
  */
-public abstract class ScrollListener extends RecyclerView.OnScrollListener {
+public abstract class ScrollListener extends RecyclerView.OnScrollListener {// TODO: 16.12.15 think about rewriting
     // item bellow position before init loading
     private int visibleThreshold = 5;
     // current offset index of data loaded

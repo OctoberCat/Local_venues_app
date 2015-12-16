@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return venueList.size();
     }
 
-    void updateData(List<Venue> updateList) {//todo update data
+    public void updateData(List<Venue> updateList) {//todo update data
         venueList.clear();
         venueList.addAll(updateList);
         notifyDataSetChanged();

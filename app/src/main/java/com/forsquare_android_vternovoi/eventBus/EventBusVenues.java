@@ -7,16 +7,32 @@ import com.squareup.otto.ThreadEnforcer;
  * Created by valentin on 11.12.15.
  */
 public class EventBusVenues {
-    private static Bus busInstance = null;
+    private static Bus bus = null;
 
     private EventBusVenues() {
-        busInstance = new Bus(ThreadEnforcer.ANY);
+        // No instances.
     }
 
     public static Bus getInstance() {
-        if (busInstance == null) {
-            busInstance = new Bus();
+        if (bus == null) {
+            return bus = new Bus(ThreadEnforcer.ANY);
         }
-        return busInstance;
+        return bus;
     }
+
+/*    private static final Handler mainThread = new Handler(Looper.getMainLooper());
+
+    public static void postOnMain(final Object event) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            getInstance().post(event);
+        } else {
+            mainThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    getInstance().post(event);
+
+                }
+            });
+        }
+    }*/
 }

@@ -20,7 +20,6 @@ import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
 import com.forsquare_android_vternovoi.eventBus.UpdateEvent;
 import com.forsquare_android_vternovoi.manager.DataManager;
 import com.forsquare_android_vternovoi.models.Venue;
-import com.forsquare_android_vternovoi.revenueDB.FoursquareDataSource;
 import com.forsquare_android_vternovoi.services.WebService;
 import com.squareup.otto.Subscribe;
 
@@ -44,39 +43,36 @@ public class RevenueListFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBusVenues.getInstance().register(this);
+
         if (isOnline()) {
             //Start service
             WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
         }
-
-        dataManager = DataManager.getInstance(getActivity());
-
-
-        //move to DataManager
-        FoursquareDataSource dataSource = new FoursquareDataSource(getActivity());
-        dataSource.open();
-        venuesResultList = dataSource.getAllVenues();
-        dataSource.close();
+        dataManager = DataManager.getInstance(getActivity().getApplicationContext());
+        venuesResultList = dataManager.getVenuesFromDB();
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //bus registration
+        EventBusVenues.getInstance().register(this);
+
 
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-
+        //attach result from db to adapter
         recyclerAdapter = new RecyclerAdapter(venuesResultList);
         recyclerView.setAdapter(recyclerAdapter);
-
+        //
 
         recyclerView.addOnScrollListener(new ScrollListener((LinearLayoutManager) layoutManager) {
             @Override
@@ -89,12 +85,7 @@ public class RevenueListFragment extends Fragment {
     }
 
 
-    boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
-    }
-
-
+    // TODO: 16.12.15  rewrite
     void loadMoreDataFromApi(int mOffset) {
         Log.i(TAG, "inside loadMoreDataFromApi");
         offset = String.valueOf(Integer.valueOf(offset) + mOffset);//monstrous, find appropriate approach
@@ -106,24 +97,22 @@ public class RevenueListFragment extends Fragment {
     }
 
     @Subscribe
-    public void getUpdatedVenues(UpdateEvent upd) {
-
-        for (Venue venue : upd.getVenueArrayList()) {
-            Log.i("Event received test", "venue names: " + venue.getName());
-        }
-        //todo use venuesResultList = venuesUpdateList or adapter.update(venuesUpdateList)?
-
+    public void onDatabaseUpdate(UpdateEvent upd) {
+        Log.i("onDatabaseUpdate", "Subscriber received event");
+        //
+        venuesResultList = dataManager.getVenuesFromDB();
+        //bad idea
+        recyclerAdapter.updateData(venuesResultList);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroyView() {
+        super.onDestroyView();
         EventBusVenues.getInstance().unregister(this);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // EventBusVenues.getInstance().register(this);
+    boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 }

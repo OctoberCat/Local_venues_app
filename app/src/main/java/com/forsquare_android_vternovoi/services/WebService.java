@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
+import com.forsquare_android_vternovoi.eventBus.UpdateEvent;
 import com.forsquare_android_vternovoi.foursquareApi.FoursquareService;
 import com.forsquare_android_vternovoi.foursquareApi.WebInterface;
 import com.forsquare_android_vternovoi.manager.DataManager;
@@ -90,8 +92,10 @@ public class WebService extends Service {
         String limit = intent.getStringExtra(EXTRAS_LIMIT);
         String offset = intent.getStringExtra(EXTRAS_OFFSET);
         Log.i("handle", "offset check " + offset);
+
         //checking if this first web request by
         firstTimeFlag = offset.equals("0");
+
         parametersMap = new HashMap<>();
         parametersMap.put(EXTRAS_CLIENT_ID, CLIENT_ID_VALUE);
         parametersMap.put(EXTRAS_CLIENT_SECRET, CLIENT_SECRET_VALUE);
@@ -118,9 +122,7 @@ public class WebService extends Service {
                     Call<VenueResponse> call = client.exploreVenues(parametersMap);
 
                     resultVenueResponse = call.execute().body();
-                    // sync write to db
 
-                    // eventbus.post(event
                     Log.i("executor", "result is null: " + (resultVenueResponse == null));
                     Log.i("executor", "FLAG OFFSET " + firstTimeFlag);
                     if (resultVenueResponse != null) {
@@ -128,7 +130,10 @@ public class WebService extends Service {
                         Log.i("executor", "results quantity: " + itemList.size());
 
 
+                        // sync write to db
                         DataManager.getInstance(getApplicationContext()).updateVenuesDB(itemList, firstTimeFlag);
+                        // eventbus.post(event
+                        EventBusVenues.getInstance().post(new UpdateEvent());
                     }
                     // RevenueListFragment.venueResponse = resultVenueResponse; // TODO: 11.12.15 replace with event bus
                 } catch (IOException e) {
