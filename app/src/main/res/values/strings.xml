@@ -6,4 +6,7 @@
     <string name="VenueNameSample">IT_cafe</string>
     <string name="addressSample">проспект Правди, 10A</string>
     <string name="ratingSample">9.5</string>
+    <string name="userNameSample">Sergei Maljar</string>
+    <string name="urlSample">https://foursquare.com/item/4f76f158e4b040208bac9a10</string>
+    <string name="tipTextSample">Считается старейшим среди скверов и парков города. Во время основания Харькова это была густая природная дубрава. Позже, на месте этого леса по инициативе В. Каразина был заложен сад.</string>
 </resources>

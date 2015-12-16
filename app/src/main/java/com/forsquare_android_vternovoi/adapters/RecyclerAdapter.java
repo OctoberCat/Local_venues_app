@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.forsquare_android_vternovoi.R;
+import com.forsquare_android_vternovoi.eventBus.ClickEvent;
+import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
 import com.forsquare_android_vternovoi.models.Venue;
 
 import java.util.List;
@@ -90,6 +93,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).venueName.setText(venue.getName());
             ((ItemViewHolder) holder).streetAdr.setText(venue.getLocation().getAddress());
             ((ItemViewHolder) holder).rating.setText(venue.getRating().toString());
+            ((ItemViewHolder) holder).venue = venue;
         } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
@@ -131,10 +135,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         @Bind(R.id.rating)
         TextView rating;
 
+        Venue venue;
         ItemViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+            view.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    EventBusVenues.getInstance().post(new ClickEvent());
+                    Toast.makeText(v.getContext(),
+                            "OnClick :" + venue.getName() + " \n " + venue.getRating(),
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            });
         }
+
+
     }
 
     class ProgressViewHolder extends RecyclerView.ViewHolder {

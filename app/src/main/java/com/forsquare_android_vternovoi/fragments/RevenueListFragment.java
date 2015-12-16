@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.forsquare_android_vternovoi.R;
 import com.forsquare_android_vternovoi.adapters.OnLoadMoreListener;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
+import com.forsquare_android_vternovoi.eventBus.ClickEvent;
 import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
 import com.forsquare_android_vternovoi.eventBus.UpdateEvent;
 import com.forsquare_android_vternovoi.manager.DataManager;
@@ -34,7 +35,7 @@ public class RevenueListFragment extends Fragment {
     //predefined values for service
     public static final String ll = "50.00,36.24";
     public static final String radius = "1500";
-    public static final String limit = "10";
+    public static final String limit = "20";
     public static final String venuePhotos = "1";
     private final static String TAG = "RevenueListFragment";
     public static String offset = "0";
@@ -118,6 +119,12 @@ public class RevenueListFragment extends Fragment {
         recyclerAdapter.updateData(venuesResultList);
     }
 
+    @Subscribe
+    public void onItemClick(ClickEvent clickEvent) {
+        Log.i("onItemClick", "Subscriber received event");
+        //starting another activity
+
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
