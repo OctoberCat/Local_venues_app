@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.forsquare_android_vternovoi.models.Contact;
 import com.forsquare_android_vternovoi.models.Item;
@@ -15,26 +14,20 @@ import com.forsquare_android_vternovoi.models.Venue;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by valentin on 11.12.15.
+/*
+  Created by valentin on 11.12.15.
  */
 public class FoursquareDataSource {
     private static FoursquareDBHelper dbHelper;
     private SQLiteDatabase database;
-    private int version = 1;
-
     private String[] allColumnsVenues = {FoursquareDBHelper.COLUMN_ID, FoursquareDBHelper.COLUMN_NAME,
             FoursquareDBHelper.COLUMN_CONTACT_ID, FoursquareDBHelper.COLUMN_LOCATION_ID, FoursquareDBHelper.COLUMN_URL, FoursquareDBHelper.COLUMN_RATING, FoursquareDBHelper.COLUMN_RATING_COLOR};
-
     private String[] allColumnsContact = {FoursquareDBHelper.COLUMN_ID, FoursquareDBHelper.COLUMN_PHONE};
-
     private String[] allColumnsLocation = {FoursquareDBHelper.COLUMN_ID, FoursquareDBHelper.COLUMN_ADDRESS, FoursquareDBHelper.COLUMN_LAT, FoursquareDBHelper.COLUMN_LNG,
             FoursquareDBHelper.COLUMN_CITY};
 
     public FoursquareDataSource(Context context) {
-
         dbHelper = FoursquareDBHelper.getInstance(context);
-
     }
 
     public void open() throws SQLException {
@@ -45,46 +38,32 @@ public class FoursquareDataSource {
         dbHelper.close();
     }
 
-    public void dropAndUpgrade() {
-        dbHelper.onUpgrade(database, version, ++version);
-    }//bad idea, change
+    public void deleteVenueTable() {
+        database.delete(FoursquareDBHelper.VENUES_TABLE_NAME, null, null);
+    }//changed from onUpgrade
 
 
-    public void persistVenue(Item item) {
-        Venue venue = item.getVenue();
-        ContentValues values = new ContentValues();
-        values.put(FoursquareDBHelper.COLUMN_ID, venue.getId());
-        values.put(FoursquareDBHelper.COLUMN_NAME, venue.getName());
-        values.put(FoursquareDBHelper.COLUMN_CONTACT_ID, createContact(venue.getContact())); //retrieve ID and make a record
-        values.put(FoursquareDBHelper.COLUMN_LOCATION_ID, createLocation(venue.getLocation()));//
-        values.put(FoursquareDBHelper.COLUMN_RATING, venue.getRating());
-        values.put(FoursquareDBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
-        long insertId = database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);
-        Log.i("Venue insertId: ", "" + insertId);
-        /*Cursor cursor = database.query(FoursquareDBHelper.VENUES_TABLE_NAME, allColumnsVenues,
-                FoursquareDBHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
-        //cursor.moveToFirst();
-        return cursorToVenue(cursor);*/
-
-    }
-
-    public ArrayList<Venue> persistVenues(List<Item> itemList) {
-        ArrayList<Venue> createdVenueList = new ArrayList<>();
+    public void persistVenues(List<Item> itemList) {
         database.beginTransaction();
-        for (Item item : itemList) {
-            Venue venue = item.getVenue();
-            ContentValues values = new ContentValues();
-            values.put(FoursquareDBHelper.COLUMN_ID, venue.getId());
-            values.put(FoursquareDBHelper.COLUMN_NAME, venue.getName());
-            values.put(FoursquareDBHelper.COLUMN_CONTACT_ID, createContact(venue.getContact())); //retrieve ID and make a record
-            values.put(FoursquareDBHelper.COLUMN_LOCATION_ID, createLocation(venue.getLocation()));//
-            values.put(FoursquareDBHelper.COLUMN_RATING, venue.getRating());
-            values.put(FoursquareDBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
-            database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);
+        try {
+            for (Item item : itemList) {
+                Venue venue = item.getVenue();
+                ContentValues values = new ContentValues();
+                values.put(FoursquareDBHelper.COLUMN_ID, venue.getId());
+                values.put(FoursquareDBHelper.COLUMN_NAME, venue.getName());
+                values.put(FoursquareDBHelper.COLUMN_CONTACT_ID, persistContact(venue.getContact())); //retrieve ID and make a record
+                values.put(FoursquareDBHelper.COLUMN_LOCATION_ID, persistLocation(venue.getLocation()));//
+                values.put(FoursquareDBHelper.COLUMN_RATING, venue.getRating());
+                values.put(FoursquareDBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
+                database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);
+                database.insertWithOnConflict(FoursquareDBHelper.VENUES_TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
         }
-        database.setTransactionSuccessful();
-        database.endTransaction();
-        return createdVenueList;
     }
 
     public List<Venue> getAllVenues() {
@@ -100,21 +79,20 @@ public class FoursquareDataSource {
         return venueList;
     }
 
-    //
-    public long createContact(Contact contact) {
+    public long persistContact(Contact contact) {
         ContentValues values = new ContentValues();
         values.put(FoursquareDBHelper.COLUMN_PHONE, contact.getFormattedPhone());
-        long insertId = database.insert(FoursquareDBHelper.CONTACTS_TABLE_NAME, null, values);
+        long insertId = database.insertWithOnConflict(FoursquareDBHelper.CONTACTS_TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         return insertId;
     }
 
-    public long createLocation(Location location) {
+    public long persistLocation(Location location) {
         ContentValues values = new ContentValues();
         values.put(FoursquareDBHelper.COLUMN_ADDRESS, location.getAddress());
         values.put(FoursquareDBHelper.COLUMN_LAT, location.getLat());
         values.put(FoursquareDBHelper.COLUMN_LNG, location.getLng());
         values.put(FoursquareDBHelper.COLUMN_ADDRESS, location.getAddress());
-        long insertId = database.insert(FoursquareDBHelper.LOCATIONS_TABLE_NAME, null, values);
+        long insertId = database.insertWithOnConflict(FoursquareDBHelper.LOCATIONS_TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         return insertId;
     }
 
@@ -149,12 +127,6 @@ public class FoursquareDataSource {
         return null;
     }
 
-/*
-    public long createTip(Tip tip) {
-        ContentValues values = new ContentValues();
-        values.put(FoursquareDBHelper.,tip.getText());
-
-    }*/
 
     private Venue cursorToVenue(Cursor cursor) {
         Venue venue = new Venue();
@@ -182,4 +154,6 @@ public class FoursquareDataSource {
         location.setCity(cursor.getString(4));
         return location;
     }
+
+    //todo tips interaction
 }

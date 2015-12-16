@@ -5,6 +5,7 @@ package com.forsquare_android_vternovoi.fragments;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.forsquare_android_vternovoi.R;
+import com.forsquare_android_vternovoi.adapters.OnLoadMoreListener;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
-import com.forsquare_android_vternovoi.adapters.ScrollListener;
 import com.forsquare_android_vternovoi.eventBus.EventBusVenues;
 import com.forsquare_android_vternovoi.eventBus.UpdateEvent;
 import com.forsquare_android_vternovoi.manager.DataManager;
@@ -37,12 +38,13 @@ public class RevenueListFragment extends Fragment {
     public static final String venuePhotos = "1";
     private final static String TAG = "RevenueListFragment";
     public static String offset = "0";
+    //check
+    protected Handler handler;
     List<Venue> venuesResultList;
     //
     DataManager dataManager;
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class RevenueListFragment extends Fragment {
         }
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
         venuesResultList = dataManager.getVenuesFromDB();
+        handler = new Handler();
 
     }
 
@@ -70,31 +73,41 @@ public class RevenueListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         //attach result from db to adapter
-        recyclerAdapter = new RecyclerAdapter(venuesResultList);
+        recyclerAdapter = new RecyclerAdapter(venuesResultList, recyclerView);
         recyclerView.setAdapter(recyclerAdapter);
         //
 
-        recyclerView.addOnScrollListener(new ScrollListener((LinearLayoutManager) layoutManager) {
+
+        recyclerAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMore(int page, int itemCount) {
-                // fetch data asynchronously here
-                loadMoreDataFromApi(page);
+            public void onLoadMore() {
+                venuesResultList.add(null);
+                recyclerAdapter.notifyItemInserted(venuesResultList.size() - 1);
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //   remove progress item
+                        venuesResultList.remove(venuesResultList.size() - 1);
+                        recyclerAdapter.notifyItemRemoved(venuesResultList.size());
+                        //add items one by one
+
+
+                        int currSize = recyclerAdapter.getItemCount();
+                        offset = String.valueOf(Integer.valueOf(offset) + currSize);//monstrous, find appropriate approach
+                        WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
+
+
+                        recyclerAdapter.notifyDataSetChanged();
+                        recyclerAdapter.setLoaded();
+
+                    }
+                }, 2000);
             }
         });
         return rootView;
     }
 
-
-    // TODO: 16.12.15  rewrite
-    void loadMoreDataFromApi(int mOffset) {
-        Log.i(TAG, "inside loadMoreDataFromApi");
-        offset = String.valueOf(Integer.valueOf(offset) + mOffset);//monstrous, find appropriate approach
-        int currSize = recyclerAdapter.getItemCount();
-        //WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
-
-
-        //recyclerAdapter.notifyItemRangeChanged(currSize, );
-    }
 
     @Subscribe
     public void onDatabaseUpdate(UpdateEvent upd) {
