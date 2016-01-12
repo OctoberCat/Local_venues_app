@@ -11,15 +11,6 @@ import java.util.List;
 
 public class Response {
 
-    @SerializedName("headerLocation")
-    @Expose
-    private String headerLocation;
-    @SerializedName("headerFullLocation")
-    @Expose
-    private String headerFullLocation;
-    @SerializedName("headerLocationGranularity")
-    @Expose
-    private String headerLocationGranularity;
     @SerializedName("totalResults")
     @Expose
     private Long totalResults;
@@ -27,48 +18,6 @@ public class Response {
     @Expose
     private List<Group> groups = new ArrayList<Group>();
 
-
-    /**
-     * @return The headerLocation
-     */
-    public String getHeaderLocation() {
-        return headerLocation;
-    }
-
-    /**
-     * @param headerLocation The headerLocation
-     */
-    public void setHeaderLocation(String headerLocation) {
-        this.headerLocation = headerLocation;
-    }
-
-    /**
-     * @return The headerFullLocation
-     */
-    public String getHeaderFullLocation() {
-        return headerFullLocation;
-    }
-
-    /**
-     * @param headerFullLocation The headerFullLocation
-     */
-    public void setHeaderFullLocation(String headerFullLocation) {
-        this.headerFullLocation = headerFullLocation;
-    }
-
-    /**
-     * @return The headerLocationGranularity
-     */
-    public String getHeaderLocationGranularity() {
-        return headerLocationGranularity;
-    }
-
-    /**
-     * @param headerLocationGranularity The headerLocationGranularity
-     */
-    public void setHeaderLocationGranularity(String headerLocationGranularity) {
-        this.headerLocationGranularity = headerLocationGranularity;
-    }
 
     /**
      * @return The totalResults

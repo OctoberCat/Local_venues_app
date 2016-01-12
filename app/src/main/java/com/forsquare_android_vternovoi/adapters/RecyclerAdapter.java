@@ -3,6 +3,7 @@ package com.forsquare_android_vternovoi.adapters;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             ((ItemViewHolder) holder).venue = venue;
         } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
+
         }
     }
 
@@ -105,6 +107,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void updateData(List<Venue> updateList) {//todo update data
+        Log.i("ISINVOLVED","inside updateData() method");
         venueList.clear();
         venueList.addAll(updateList);
         notifyDataSetChanged();
@@ -136,6 +139,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         TextView rating;
 
         Venue venue;
+
         ItemViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

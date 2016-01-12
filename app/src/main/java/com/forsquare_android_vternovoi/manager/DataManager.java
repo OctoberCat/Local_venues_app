@@ -43,7 +43,7 @@ public class DataManager {
 
         dataSource.open();
         if (firstTimeFlag) {
-            dataSource.deleteVenueTable();//drop previous results
+            dataSource.deleteVenueTable(); //drop previous results
         }
         dataSource.persistVenues(retrievedList);
         venuesResultList = dataSource.getAllVenues();

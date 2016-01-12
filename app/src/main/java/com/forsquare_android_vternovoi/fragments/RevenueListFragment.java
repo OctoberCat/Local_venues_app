@@ -3,6 +3,7 @@ package com.forsquare_android_vternovoi.fragments;
 //import android.app.LoaderManager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.forsquare_android_vternovoi.R;
+import com.forsquare_android_vternovoi.activities.MainActivity;
 import com.forsquare_android_vternovoi.adapters.OnLoadMoreListener;
 import com.forsquare_android_vternovoi.adapters.RecyclerAdapter;
 import com.forsquare_android_vternovoi.eventBus.ClickEvent;
@@ -43,17 +45,24 @@ public class RevenueListFragment extends Fragment {
     protected Handler handler;
     List<Venue> venuesResultList;
     //
-    DataManager dataManager;
+    private DataManager dataManager;
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
+
+    private String longLat;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = getActivity().getPreferences(0);
+
+        longLat =  sharedPreferences.getString(MainActivity.LocKey, ll);
 
         if (isOnline()) {
             //Start service
-            WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
+            WebService.fetchVenues(getActivity(), longLat, radius, limit, offset, venuePhotos);
         }
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
         venuesResultList = dataManager.getVenuesFromDB();
@@ -96,7 +105,7 @@ public class RevenueListFragment extends Fragment {
 
                         int currSize = recyclerAdapter.getItemCount();
                         offset = String.valueOf(Integer.valueOf(offset) + currSize);//monstrous, find appropriate approach
-                        WebService.fetchVenues(getActivity(), ll, radius, limit, offset, venuePhotos);
+                        WebService.fetchVenues(getActivity(), longLat, radius, limit, offset, venuePhotos);
 
 
                         recyclerAdapter.notifyDataSetChanged();

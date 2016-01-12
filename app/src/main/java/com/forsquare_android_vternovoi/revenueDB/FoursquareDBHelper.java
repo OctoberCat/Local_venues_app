@@ -36,6 +36,8 @@ public class FoursquareDBHelper extends SQLiteOpenHelper {
     public final static String COLUMN_CANONICAL_URL = "canonical_url";
     private final static String DATABASE_NAME = "foursquare.db";
     private final static int DATABASE_VERSION = 1;
+
+
     private static final String CREATE_VENUE_TABLE = " create table " + VENUES_TABLE_NAME + " ( " +
             COLUMN_ID + " text primary key, " + COLUMN_NAME + " text not null, "
             + COLUMN_CONTACT_ID + " integer, "
@@ -54,10 +56,14 @@ public class FoursquareDBHelper extends SQLiteOpenHelper {
                 + ");";*/
     private static final String CREATE_LOCATIONS_TABLE = " create table " + LOCATIONS_TABLE_NAME + " ( " + COLUMN_ID + " integer primary key autoincrement, " +
             COLUMN_ADDRESS + " text not null, " + COLUMN_LAT + " real not null," + COLUMN_LNG + " real not null," + COLUMN_CITY + " text " + ");";
+
     private static final String CREATE_CONTACTS_TABLE = " create table " + CONTACTS_TABLE_NAME + " ( " +
             COLUMN_ID + " integer primary key autoincrement, " + COLUMN_PHONE + " text " + ");";
+
     private static final String CREATE_TIPS_TABLE = " create table " + TIPS_TABLE_NAME + " ( " +
             COLUMN_ID + " integer primary key autoincrement, " + COLUMN_TIP_TEXT + " text " + COLUMN_CANONICAL_URL + " text not null " + ");";
+
+
     private static FoursquareDBHelper foursquareDBHelper = null;
 
     private FoursquareDBHelper(Context context) {

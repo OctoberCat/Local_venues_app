@@ -12,9 +12,6 @@ import java.util.List;
 
 public class Item {
 
-    @SerializedName("reasons")
-    @Expose
-    private Reasons reasons;
     @SerializedName("venue")
     @Expose
     private Venue venue;
@@ -24,20 +21,6 @@ public class Item {
     @SerializedName("referralId")
     @Expose
     private String referralId;
-
-    /**
-     * @return The reasons
-     */
-    public Reasons getReasons() {
-        return reasons;
-    }
-
-    /**
-     * @param reasons The reasons
-     */
-    public void setReasons(Reasons reasons) {
-        this.reasons = reasons;
-    }
 
     /**
      * @return The venue

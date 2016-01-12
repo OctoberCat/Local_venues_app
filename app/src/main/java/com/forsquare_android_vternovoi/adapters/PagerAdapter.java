@@ -10,8 +10,8 @@ import com.forsquare_android_vternovoi.fragments.RevenueListFragment;
 /**
  * Created by valentin on 09.12.15.
  */
-public class TabsAdapter extends FragmentPagerAdapter {
-    public TabsAdapter(FragmentManager fm) {
+public class PagerAdapter extends FragmentPagerAdapter {
+    public PagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

@@ -55,7 +55,7 @@ public class FoursquareDataSource {
                 values.put(FoursquareDBHelper.COLUMN_LOCATION_ID, persistLocation(venue.getLocation()));//
                 values.put(FoursquareDBHelper.COLUMN_RATING, venue.getRating());
                 values.put(FoursquareDBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
-                database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);
+               /* database.insert(FoursquareDBHelper.VENUES_TABLE_NAME, null, values);*/
                 database.insertWithOnConflict(FoursquareDBHelper.VENUES_TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
             }
             database.setTransactionSuccessful();
