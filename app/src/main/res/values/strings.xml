@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LocalVenues</string>
+    <string name="venues_tab">Venues</string>
+    <string name="map_tab">Map</string>
+</resources>
