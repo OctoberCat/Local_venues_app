@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         ///Location updates///
+        Log.i(LOCATION_TAG, "onConnected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         mLocationRequest.setInterval(180000);// 3 minutes
@@ -92,12 +93,7 @@ public class MainActivity extends AppCompatActivity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         //Last location//
 
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (lastLocation != null) {
-            Log.i(LOCATION_TAG, "Last location" + lastLocation.toString());
-        } else {
-            Snackbar.make(coordinatorLayout, "Device location is required", Snackbar.LENGTH_LONG).show();
-        }
+
     }
 
     @Override
@@ -113,6 +109,14 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(LOCATION_TAG, "Connection failed");
+
+        //I assume that it is good place for this
+        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (lastLocation != null) {
+            Log.i(LOCATION_TAG, "Last location" + lastLocation.toString());
+        } else {
+            Snackbar.make(coordinatorLayout, "Device location is required", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void setupIcons() {
