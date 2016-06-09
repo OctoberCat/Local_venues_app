@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class Venue {
-
+    // TODO: 05.06.16  add price!!!! 
     private String id;
     private String name;
     private Contact contact;

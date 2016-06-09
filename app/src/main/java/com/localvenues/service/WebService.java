@@ -91,7 +91,7 @@ public class WebService extends Service {
                     Call<TipsResponse> call = client.fetchVenueTips(venueId);
                     tipsResponse = call.execute().body();
                     /////////////////
-                    Log.i(LOG_TAG, " Check tips response is null:" + (tipsResponse==null));
+                    Log.i(LOG_TAG, " Check tips response is null:" + (tipsResponse == null));
                     Log.i(LOG_TAG, "tip count: " + tipsResponse.getResponse().getTips().getCount());
                     if (tipsResponse.getResponse().getTips().getCount() != 0) {
                         Log.i(LOG_TAG, "tip first tip text: " + tipsResponse.getResponse().getTips().getItems().get(0).getText());
@@ -125,6 +125,8 @@ public class WebService extends Service {
                 try {
                     //// TODO: 29.05.16 persist data eventbus
                     exploreResponse = call.execute().body();
+                    Log.i(LOG_TAG, "explore response is null: " + (exploreResponse == null));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
