@@ -6,28 +6,10 @@ import java.util.List;
 
 public class Item {
 
-    private Reasons reasons;
     private Venue venue;
-    private List<Tip> tips = new ArrayList<Tip>();
+    private List<Tip> tips = new ArrayList<>();
     private String referralId;
 
-    /**
-     * 
-     * @return
-     *     The reasons
-     */
-    public Reasons getReasons() {
-        return reasons;
-    }
-
-    /**
-     * 
-     * @param reasons
-     *     The reasons
-     */
-    public void setReasons(Reasons reasons) {
-        this.reasons = reasons;
-    }
 
     /**
      * 

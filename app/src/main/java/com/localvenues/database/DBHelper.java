@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by valentyn on 04.06.16.
+/*
+ * Created by OctoberCat on 04.06.16.
  */
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "LocalVenues.db";
@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_LAT = "lat";
     public static final String COLUMN_LNG = "lng";
-    public static final String COLUMN_CITY = "city";
+//    public static final String COLUMN_CITY = "city";
 
     //authors
     public static final String TABLE_USERS = "users";
@@ -96,17 +96,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_RATING_COLOR + STM_TEXT + STM_NOT_NULL +
                 COLUMN_LOCATION_ID + STM_INTEGER + STM_NOT_NULL +
                 COLUMN_PHOTO_ID + STM_TEXT + STM_NOT_NULL +
-                COLUMN_PHONE + STM_TEXT +
-                STM_FOREIGN_KEY + " ( " + COLUMN_LOCATION_ID + " ) " + STM_REFERENCES + TABLE_LOCATIONS + " (" + COLUMN_ID + " ) " +
-                STM_FOREIGN_KEY + " ( " + COLUMN_PHOTO_ID + " ) " + STM_REFERENCES + TABLE_PHOTOS + " (" + COLUMN_ID + " ) "
+                COLUMN_PHONE + STM_TEXT + ", " +
+                STM_FOREIGN_KEY + "(" + COLUMN_LOCATION_ID + ")" + STM_REFERENCES + TABLE_LOCATIONS + "(" + COLUMN_ID + "), " +
+                STM_FOREIGN_KEY + "(" + COLUMN_PHOTO_ID + ")" + STM_REFERENCES + TABLE_PHOTOS + "(" + COLUMN_ID + ") "
                 + ");";//
 
         String CREATE_TABLE_LOCATIONS = STM_CREATE_TABLE + TABLE_LOCATIONS + " ( " +
                 COLUMN_ID + STM_INTEGER + STM_PRIMARY_KEY + STM_AUTOINCREMENT +
                 COLUMN_ADDRESS + STM_TEXT + STM_NOT_NULL +
                 COLUMN_LAT + STM_REAL + STM_NOT_NULL +
-                COLUMN_LNG + STM_REAL + STM_NOT_NULL +
-                COLUMN_CITY + STM_TEXT
+                COLUMN_LNG + STM_REAL + STM_NOT_NULL
+//                COLUMN_CITY + STM_TEXT
                 + ");";//
 
         String CREATE_TABLE_TIPS = STM_CREATE_TABLE + TABLE_TIPS + " ( " +
@@ -114,13 +114,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_VENUE_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_AUTHOR_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_TIP_TEXT + STM_TEXT + STM_NOT_NULL +
-                STM_FOREIGN_KEY + " ( " + COLUMN_VENUE_ID + " ) " + STM_REFERENCES + TABLE_VENUES + " (" + COLUMN_ID + " ) " +
-                STM_FOREIGN_KEY + " ( " + COLUMN_AUTHOR_ID + " ) " + STM_REFERENCES + TABLE_USERS + " (" + COLUMN_ID + " ) " +
-                STM_FOREIGN_KEY + " ( " + COLUMN_PHOTO_ID + " ) " + STM_REFERENCES + TABLE_PHOTOS + " (" + COLUMN_ID + " ) "
+                STM_FOREIGN_KEY + "(" + COLUMN_VENUE_ID + ")" + STM_REFERENCES + TABLE_VENUES + "(" + COLUMN_ID + "), " +
+                STM_FOREIGN_KEY + "(" + COLUMN_AUTHOR_ID + ")" + STM_REFERENCES + TABLE_USERS + "(" + COLUMN_ID + "), " +
+                STM_FOREIGN_KEY + "(" + COLUMN_PHOTO_ID + ")" + STM_REFERENCES + TABLE_PHOTOS + "(" + COLUMN_ID + ") "
                 + ");";
 
         String CREATE_TABLE_PHOTOS = STM_CREATE_TABLE + TABLE_PHOTOS + " ( " +
-                COLUMN_ID + STM_INTEGER + STM_PRIMARY_KEY + STM_AUTOINCREMENT +
+                COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +/*STM_INTEGER + STM_PRIMARY_KEY + STM_AUTOINCREMENT +*/
                 COLUMN_PREFIX + STM_TEXT + STM_NOT_NULL +
                 COLUMN_SUFFIX + STM_TEXT + STM_NOT_NULL
                 + ");";

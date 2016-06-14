@@ -4,26 +4,8 @@ package com.localvenues.model.venueResponse;
 
 public class ExploreResponse {
 
-    private Meta meta;
     private Response response;
 
-    /**
-     * 
-     * @return
-     *     The meta
-     */
-    public Meta getMeta() {
-        return meta;
-    }
-
-    /**
-     * 
-     * @param meta
-     *     The meta
-     */
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
 
     /**
      * 

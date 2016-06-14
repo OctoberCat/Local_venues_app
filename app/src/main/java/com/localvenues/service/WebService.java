@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.localvenues.database.DBDataSource;
 import com.localvenues.model.tipResponse.TipsResponse;
 import com.localvenues.model.venueResponse.ExploreResponse;
 import com.localvenues.restClient.ApiRequests;
@@ -57,7 +58,7 @@ public class WebService extends Service {
         context.startService(intent);
     }
 
-    public static void fetchVenues(Context context, String venueId) {
+    public static void fetchTips(Context context, String venueId) {
         Intent intent = new Intent(context, WebService.class);
         intent.setAction(ACTION_FETCH_TIPS);
         intent.putExtra(EXTRAS_VENUEID, venueId);
@@ -126,8 +127,15 @@ public class WebService extends Service {
                     //// TODO: 29.05.16 persist data eventbus
                     exploreResponse = call.execute().body();
                     Log.i(LOG_TAG, "explore response is null: " + (exploreResponse == null));
+                    if (exploreResponse != null) {
+                        DBDataSource dbDataSource = new DBDataSource(getApplicationContext());
+                        dbDataSource.open();
+                        dbDataSource.saveVenueList(exploreResponse.getResponse().getGroups().get(0).getItems());
+                        dbDataSource.close();
+                    }
 
                 } catch (IOException e) {
+                    Log.i(LOG_TAG, "Exception during exploring venues");
                     e.printStackTrace();
                 }
             }
