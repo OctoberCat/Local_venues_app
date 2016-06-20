@@ -12,11 +12,9 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -32,8 +30,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    /* @Bind(R.id.toolbar)
+     Toolbar toolbar;*/
     @Bind(R.id.pager)
     ViewPager viewPager;
     @Bind(R.id.tabs)
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         Log.i("Activity", "FUUUUU");
         //
         /*mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+//        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -88,11 +86,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onStart();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
+//        client.connect();
         // mGoogleApiClient.connect();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
+       /* Action viewAction = Action.newAction(
                 Action.TYPE_VIEW, // TODO: choose an action type.
                 "Main Page", // TODO: Define a title for the content shown.
                 // TODO: If you have web page content that matches this app activity's content,
@@ -102,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements
                 // TODO: Make sure this auto-generated app URL is correct.
                 Uri.parse("android-app://com.localvenues.ui.activity/http/host/path")
         );
-        AppIndex.AppIndexApi.start(client, viewAction);
+        AppIndex.AppIndexApi.start(client, viewAction);*/
     }
 
     @Override
@@ -123,10 +121,10 @@ public class MainActivity extends AppCompatActivity implements
                 // TODO: Make sure this auto-generated app URL is correct.
                 Uri.parse("android-app://com.localvenues.ui.activity/http/host/path")
         );
-        AppIndex.AppIndexApi.end(client, viewAction);
+        /*AppIndex.AppIndexApi.end(client, viewAction);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.disconnect();
+        client.disconnect();*/
     }
 
     @Override

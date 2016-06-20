@@ -3,11 +3,14 @@ package com.localvenues.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /*
  * Created by OctoberCat on 04.06.16.
  */
 public class DBHelper extends SQLiteOpenHelper {
+    private final String LOG_TAG = "DBHelper";
+
     public static final String DB_NAME = "LocalVenues.db";
     public static final int DB_VERSION = 1;
 
@@ -99,18 +102,32 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_PHONE + STM_TEXT + ", " +
                 STM_FOREIGN_KEY + "(" + COLUMN_LOCATION_ID + ")" + STM_REFERENCES + TABLE_LOCATIONS + "(" + COLUMN_ID + "), " +
                 STM_FOREIGN_KEY + "(" + COLUMN_PHOTO_ID + ")" + STM_REFERENCES + TABLE_PHOTOS + "(" + COLUMN_ID + ") "
-                + ");";//
+                + ");";
 
         String CREATE_TABLE_LOCATIONS = STM_CREATE_TABLE + TABLE_LOCATIONS + " ( " +
                 COLUMN_ID + STM_INTEGER + STM_PRIMARY_KEY + STM_AUTOINCREMENT +
                 COLUMN_ADDRESS + STM_TEXT + STM_NOT_NULL +
                 COLUMN_LAT + STM_REAL + STM_NOT_NULL +
-                COLUMN_LNG + STM_REAL + STM_NOT_NULL
-//                COLUMN_CITY + STM_TEXT
-                + ");";//
+                COLUMN_LNG + STM_REAL + "NOT NULL"
+                + ");";
+
+        String CREATE_TABLE_PHOTOS = STM_CREATE_TABLE + TABLE_PHOTOS + " ( " +
+                COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +
+                COLUMN_PREFIX + STM_TEXT + STM_NOT_NULL +
+                COLUMN_SUFFIX + STM_TEXT + "NOT NULL"
+                + ");";
+
+        String CREATE_TABLE_USERS = STM_CREATE_TABLE + TABLE_USERS + " ( " +
+                COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +
+                COLUMN_PHOTO_ID + STM_TEXT + STM_NOT_NULL +
+                COLUMN_FIRST_NAME + STM_TEXT + STM_NOT_NULL +
+                COLUMN_LAST_NAME + STM_TEXT + STM_NOT_NULL +
+                STM_FOREIGN_KEY + " ( " + COLUMN_PHOTO_ID + " ) " + STM_REFERENCES + TABLE_PHOTOS + " (" + COLUMN_ID + " ) "
+                + ");";
 
         String CREATE_TABLE_TIPS = STM_CREATE_TABLE + TABLE_TIPS + " ( " +
                 COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +
+                COLUMN_PHOTO_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_VENUE_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_AUTHOR_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_TIP_TEXT + STM_TEXT + STM_NOT_NULL +
@@ -119,24 +136,18 @@ public class DBHelper extends SQLiteOpenHelper {
                 STM_FOREIGN_KEY + "(" + COLUMN_PHOTO_ID + ")" + STM_REFERENCES + TABLE_PHOTOS + "(" + COLUMN_ID + ") "
                 + ");";
 
-        String CREATE_TABLE_PHOTOS = STM_CREATE_TABLE + TABLE_PHOTOS + " ( " +
-                COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +/*STM_INTEGER + STM_PRIMARY_KEY + STM_AUTOINCREMENT +*/
-                COLUMN_PREFIX + STM_TEXT + STM_NOT_NULL +
-                COLUMN_SUFFIX + STM_TEXT + STM_NOT_NULL
-                + ");";
 
-        String CREATE_TABLE_USERS = STM_CREATE_TABLE + TABLE_USERS + " ( " +
-                COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +
-                COLUMN_FIRST_NAME + STM_TEXT + STM_NOT_NULL +
-                COLUMN_LAST_NAME + STM_TEXT + STM_NOT_NULL +
-                STM_FOREIGN_KEY + " ( " + COLUMN_PHOTO_ID + " ) " + STM_REFERENCES + TABLE_PHOTOS + " (" + COLUMN_ID + " ) "
-                + ");";
-
+        Log.i(LOG_TAG, CREATE_TABLE_VENUES);
         db.execSQL(CREATE_TABLE_VENUES);
+        Log.i(LOG_TAG, CREATE_TABLE_LOCATIONS);
         db.execSQL(CREATE_TABLE_LOCATIONS);
-        db.execSQL(CREATE_TABLE_TIPS);
+        Log.i(LOG_TAG, CREATE_TABLE_PHOTOS);
         db.execSQL(CREATE_TABLE_PHOTOS);
+        Log.i(LOG_TAG, CREATE_TABLE_USERS);
         db.execSQL(CREATE_TABLE_USERS);
+        Log.i(LOG_TAG, CREATE_TABLE_TIPS);
+        db.execSQL(CREATE_TABLE_TIPS);
+
 
     }
 

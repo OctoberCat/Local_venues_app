@@ -18,8 +18,11 @@ public interface ApiRequests {
     String PREDEFINED_PARAMETERS_VENUES = PREDEFINED_PARAMETERS + "&venuePhotos=1";
     String PREDEFINED_PARAMETERS_TIPS = PREDEFINED_PARAMETERS + "&sort=recent";
 
-    @GET("/explore" + PREDEFINED_PARAMETERS_VENUES)
+    @GET("/v2/venues/explore")
     Call<ExploreResponse> exploreVenues(@QueryMap Map<String, String> parameters);
+
+    /*@GET("/explore" + PREDEFINED_PARAMETERS_VENUES)
+    Call<ExploreResponse> exploreVenues(@QueryMap Map<String, String> parameters);*/
 
     //todo the good idea is to pass limit also -> implement endless scroll in venue details
     @GET("/{venueid}/tips" + PREDEFINED_PARAMETERS_TIPS)

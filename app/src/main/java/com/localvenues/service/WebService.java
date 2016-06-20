@@ -9,6 +9,7 @@ import android.util.Log;
 import com.localvenues.database.DBDataSource;
 import com.localvenues.model.tipResponse.TipsResponse;
 import com.localvenues.model.venueResponse.ExploreResponse;
+import com.localvenues.model.venueResponse.Item;
 import com.localvenues.restClient.ApiRequests;
 import com.localvenues.restClient.RESTClient;
 
@@ -117,6 +118,10 @@ public class WebService extends Service {
         parametersMap.put(EXTRAS_LIMIT, limit);
         parametersMap.put(EXTRAS_RADIUS, radius);
         parametersMap.put(EXTRAS_OFFSET, offset);
+        parametersMap.put("client_secret", "WHAEHHOIJ0A2MARVSA3MEY13EVY1ZRWBJK3FWTAEKVD43FTH");
+        parametersMap.put("client_id", "KZ0IATCNQRWPHXGXPIQQJ3F0QWW3B1CHOGHWH22BQMVTYZDI");
+        parametersMap.put("v", "20160215");
+        parametersMap.put("venuePhotos", "1");
 
         executor.submit(new Runnable() {
             @Override
@@ -127,6 +132,12 @@ public class WebService extends Service {
                     //// TODO: 29.05.16 persist data eventbus
                     exploreResponse = call.execute().body();
                     Log.i(LOG_TAG, "explore response is null: " + (exploreResponse == null));
+                    Log.i(LOG_TAG, "CHECKING PHOTOS BEFORE SAVING");
+                    for (Item item :
+                            exploreResponse.getResponse().getGroups().get(0).getItems()) {
+                        int i = item.getVenue().getFeaturedPhotos().getCount();
+                        Log.i(LOG_TAG, String.valueOf(i));
+                    }
                     if (exploreResponse != null) {
                         DBDataSource dbDataSource = new DBDataSource(getApplicationContext());
                         dbDataSource.open();

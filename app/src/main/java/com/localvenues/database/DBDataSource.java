@@ -11,6 +11,7 @@ import com.localvenues.model.venueResponse.Contact;
 import com.localvenues.model.venueResponse.Group_;
 import com.localvenues.model.venueResponse.Item;
 import com.localvenues.model.venueResponse.Item__;
+import com.localvenues.model.venueResponse.Item___;
 import com.localvenues.model.venueResponse.Location;
 import com.localvenues.model.venueResponse.Photos;
 import com.localvenues.model.venueResponse.Venue;
@@ -67,7 +68,7 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_RATING_COLOR, venue.getRatingColor());
         values.put(DBHelper.COLUMN_PHONE, venue.getContact().getFormattedPhone());
         values.put(DBHelper.COLUMN_LOCATION_ID, saveLocation(venue.getLocation()));
-        values.put(DBHelper.COLUMN_PHOTO_ID, savePhoto(venue.getPhotos().getGroups().get(0).getItems().get(0)));//bad
+        values.put(DBHelper.COLUMN_PHOTO_ID, savePhoto(venue.getFeaturedPhotos().getItems().get(0)));
 
         database.insertWithOnConflict(DBHelper.TABLE_VENUES, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
@@ -121,13 +122,13 @@ public class DBDataSource {
     public void getAllRelevantTips(String venueID) {
     }
 
-    public String savePhoto(Item__ item__) {
+    public String savePhoto(Item___ item___) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_ID, item__.getId());
-        values.put(DBHelper.COLUMN_PREFIX, item__.getPrefix());
-        values.put(DBHelper.COLUMN_SUFFIX, item__.getSuffix());
+        values.put(DBHelper.COLUMN_ID, item___.getId());
+        values.put(DBHelper.COLUMN_PREFIX, item___.getPrefix());
+        values.put(DBHelper.COLUMN_SUFFIX, item___.getSuffix());
         database.insertWithOnConflict(DBHelper.TABLE_PHOTOS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-        return item__.getId();
+        return item___.getId();
     }
 
     private Location getRelevantLocation(int locationID) {
