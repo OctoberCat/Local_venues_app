@@ -22,6 +22,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.localvenues.R;
 import com.localvenues.adapter.PagerAdapter;
+import com.localvenues.eventBus.OttoBus;
+import com.localvenues.eventBus.VenuesPreparedEvent;
 import com.localvenues.service.WebService;
 
 import butterknife.Bind;
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         //setSupportActionBar(toolbar);
-        Log.i("Activity", "FUUUUU");
         //
         /*mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -74,7 +75,8 @@ public class MainActivity extends AppCompatActivity implements
             Log.i(LOG_TAG, "Starting venue  webservice");
             WebService.exploreVenues(this, "49.998099,36.233676", "500", "10", "0");
         } else {
-            Snackbar.make(coordinatorLayout, "No Internet connection!", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(coordinatorLayout, "No Internet connection! Stored data will be used.", Snackbar.LENGTH_INDEFINITE).show();
+            OttoBus.getInstance().post(new VenuesPreparedEvent());
         }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.

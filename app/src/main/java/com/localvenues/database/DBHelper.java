@@ -9,7 +9,7 @@ import android.util.Log;
  * Created by OctoberCat on 04.06.16.
  */
 public class DBHelper extends SQLiteOpenHelper {
-    private final String LOG_TAG = "DBHelper";
+    private final String LOG_TAG = DBHelper.class.getSimpleName();
 
     public static final String DB_NAME = "LocalVenues.db";
     public static final int DB_VERSION = 1;
@@ -23,8 +23,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LOCATION_ID = "location_id";
     public static final String COLUMN_PHOTO_ID = "photo_id";
     public static final String COLUMN_PHONE = "phone";
-    // according to model it should be separate table, but nah..
-    //    public static final String COLUMN_CONTACT_ID = "contact_id";
 
     //tips
     public static final String TABLE_TIPS = "tips";
@@ -37,7 +35,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_LAT = "lat";
     public static final String COLUMN_LNG = "lng";
-//    public static final String COLUMN_CITY = "city";
 
     //authors
     public static final String TABLE_USERS = "users";
@@ -49,9 +46,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PREFIX = "prefix";
     public static final String COLUMN_SUFFIX = "suffix";
 
-    //category - many-to-many TODO implement categories and prices later
-/*    public static final String TABLE_CATEGORIES = "categories";
-    public static final String COLUMN_CATEGORY_NAME = "category_name";*/
 
     private static DBHelper dbHelperInstance;
 

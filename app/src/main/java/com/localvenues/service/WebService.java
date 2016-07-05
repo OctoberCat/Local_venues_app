@@ -7,9 +7,10 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.localvenues.database.DBDataSource;
+import com.localvenues.eventBus.OttoBus;
+import com.localvenues.eventBus.VenuesPreparedEvent;
 import com.localvenues.model.tipResponse.TipsResponse;
 import com.localvenues.model.venueResponse.ExploreResponse;
-import com.localvenues.model.venueResponse.Item;
 import com.localvenues.restClient.ApiRequests;
 import com.localvenues.restClient.RESTClient;
 
@@ -22,7 +23,7 @@ import retrofit.Call;
 
 public class WebService extends Service {
 
-    private final String LOG_TAG = "Service";
+    private final String LOG_TAG = WebService.class.getSimpleName();
 
     public static final String ACTION_EXPLORE_VENUES = "explore_venues";
     public static final String EXTRAS_LL = "ll";
@@ -118,6 +119,7 @@ public class WebService extends Service {
         parametersMap.put(EXTRAS_LIMIT, limit);
         parametersMap.put(EXTRAS_RADIUS, radius);
         parametersMap.put(EXTRAS_OFFSET, offset);
+        //this part should be predefined at API call
         parametersMap.put("client_secret", "WHAEHHOIJ0A2MARVSA3MEY13EVY1ZRWBJK3FWTAEKVD43FTH");
         parametersMap.put("client_id", "KZ0IATCNQRWPHXGXPIQQJ3F0QWW3B1CHOGHWH22BQMVTYZDI");
         parametersMap.put("v", "20160215");
@@ -132,17 +134,13 @@ public class WebService extends Service {
                     //// TODO: 29.05.16 persist data eventbus
                     exploreResponse = call.execute().body();
                     Log.i(LOG_TAG, "explore response is null: " + (exploreResponse == null));
-                    Log.i(LOG_TAG, "CHECKING PHOTOS BEFORE SAVING");
-                    for (Item item :
-                            exploreResponse.getResponse().getGroups().get(0).getItems()) {
-                        int i = item.getVenue().getFeaturedPhotos().getCount();
-                        Log.i(LOG_TAG, String.valueOf(i));
-                    }
+
                     if (exploreResponse != null) {
                         DBDataSource dbDataSource = new DBDataSource(getApplicationContext());
                         dbDataSource.open();
                         dbDataSource.saveVenueList(exploreResponse.getResponse().getGroups().get(0).getItems());
                         dbDataSource.close();
+                        OttoBus.getInstance().post(new VenuesPreparedEvent());
                     }
 
                 } catch (IOException e) {

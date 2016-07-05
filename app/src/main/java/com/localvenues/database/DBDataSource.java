@@ -8,12 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.localvenues.model.venueResponse.Contact;
-import com.localvenues.model.venueResponse.Group_;
+import com.localvenues.model.venueResponse.FeaturedPhotos;
 import com.localvenues.model.venueResponse.Item;
-import com.localvenues.model.venueResponse.Item__;
 import com.localvenues.model.venueResponse.Item___;
 import com.localvenues.model.venueResponse.Location;
-import com.localvenues.model.venueResponse.Photos;
 import com.localvenues.model.venueResponse.Venue;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class DBDataSource {
 
     private SQLiteDatabase database;
     private DBHelper dbHelper;
-    private final String LOG_TAG = "DBDataSource";
+    private final String LOG_TAG = DBDataSource.class.getSimpleName();
     private String[] allColumnsVenues = {
             DBHelper.COLUMN_ID,
             DBHelper.COLUMN_VENUE_NAME,
@@ -70,7 +68,8 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_LOCATION_ID, saveLocation(venue.getLocation()));
         values.put(DBHelper.COLUMN_PHOTO_ID, savePhoto(venue.getFeaturedPhotos().getItems().get(0)));
 
-        database.insertWithOnConflict(DBHelper.TABLE_VENUES, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        long insertResp = database.insertWithOnConflict(DBHelper.TABLE_VENUES, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Log.i(LOG_TAG, "inserting venue response " + insertResp);
     }
 
     public void saveVenueList(List<Item> itemList) {
@@ -80,6 +79,7 @@ public class DBDataSource {
                 Venue venue = item.getVenue();
                 saveVenue(venue);
             }
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(LOG_TAG, "exception during venue saving");
             e.printStackTrace();
@@ -106,7 +106,10 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_ADDRESS, location.getAddress());
         values.put(DBHelper.COLUMN_LNG, location.getLng());
         values.put(DBHelper.COLUMN_LAT, location.getLat());
-        return database.insertWithOnConflict(DBHelper.TABLE_LOCATIONS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        long insertLocationResp = database.insertWithOnConflict(DBHelper.TABLE_LOCATIONS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Log.i(LOG_TAG, "inserting location response " + insertLocationResp);
+
+        return insertLocationResp;
     }
 
     public void saveAuthor() {
@@ -127,7 +130,9 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_ID, item___.getId());
         values.put(DBHelper.COLUMN_PREFIX, item___.getPrefix());
         values.put(DBHelper.COLUMN_SUFFIX, item___.getSuffix());
-        database.insertWithOnConflict(DBHelper.TABLE_PHOTOS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+
+        long insertPhotoResp = database.insertWithOnConflict(DBHelper.TABLE_PHOTOS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Log.i(LOG_TAG, "inserting photo response " + insertPhotoResp);
         return item___.getId();
     }
 
@@ -154,22 +159,18 @@ public class DBDataSource {
         return location;
     }
 
-    private Photos getRelevantPhoto(int photoID) {
-        String restrict = DBHelper.COLUMN_ID + "=" + photoID;
+    private FeaturedPhotos getRelevantPhoto(String photoID) {
+        String restrict = DBHelper.COLUMN_ID + " = \'" + photoID + "\'";
         Cursor cursor = database.query(true, DBHelper.TABLE_PHOTOS, allColumnsPhoto, restrict, null, null, null,
                 null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             //because of big amount of nested lists and object this part looks really ugly. Reconsider possible solutions
-            Item__ item__ = cursorToPhoto(cursor);
-            Photos photos = new Photos();
-            List<Item__> list = new ArrayList<>();
-            list.add(item__);
-            List<Group_> group_list = new ArrayList<>();
-            Group_ group = new Group_();
-            group.setItems(list);
-            group_list.add(group);
-            photos.setGroups(group_list);
+            Item___ item___ = cursorToPhoto(cursor);
+            FeaturedPhotos photos = new FeaturedPhotos();
+            List<Item___> list = new ArrayList<>();
+            list.add(item___);
+            photos.setItems(list);
             return photos;
         }
         // Make sure to close the cursor
@@ -179,12 +180,12 @@ public class DBDataSource {
         return null;
     }
 
-    private Item__ cursorToPhoto(Cursor cursor) {
-        Item__ item__ = new Item__();
-        item__.setId(cursor.getString(0));
-        item__.setPrefix(cursor.getString(1));
-        item__.setSuffix(cursor.getString(2));
-        return item__;
+    private Item___ cursorToPhoto(Cursor cursor) {
+        Item___ item___ = new Item___();
+        item___.setId(cursor.getString(0));
+        item___.setPrefix(cursor.getString(1));
+        item___.setSuffix(cursor.getString(2));
+        return item___;
 
     }
 
@@ -195,9 +196,9 @@ public class DBDataSource {
         venue.setRating(cursor.getDouble(2));
         venue.setRatingColor(cursor.getString(3));
         venue.setLocation(getRelevantLocation(cursor.getInt(4)));
-        venue.setPhotos(getRelevantPhoto(cursor.getInt(5)));
+        venue.setFeaturedPhotos(getRelevantPhoto(cursor.getString(5)));
         Contact contact = new Contact();
-        contact.setPhone(cursor.getString(6));
+        contact.setFormattedPhone(cursor.getString(6));
         venue.setContact(contact);
         return venue;
     }
