@@ -25,6 +25,8 @@ public interface ApiRequests {
     Call<ExploreResponse> exploreVenues(@QueryMap Map<String, String> parameters);*/
 
     //todo the good idea is to pass limit also -> implement endless scroll in venue details
-    @GET("/{venueid}/tips" + PREDEFINED_PARAMETERS_TIPS)
-    Call<TipsResponse> fetchVenueTips(@Path("venueid") String venueId);
+/*    @GET("/{venueid}/tips" + PREDEFINED_PARAMETERS_TIPS)
+    Call<TipsResponse> fetchVenueTips(@Path("venueid") String venueId); */
+    @GET("v2/venues/{venueid}/tips")
+    Call<TipsResponse> fetchVenueTips(@Path("venueid") String venueId, @QueryMap Map<String, String> paremeters);
 }

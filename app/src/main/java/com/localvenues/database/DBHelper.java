@@ -65,7 +65,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
-        db.setForeignKeyConstraintsEnabled(true);
+        //db.setForeignKeyConstraintsEnabled(true);
     }
 
 
@@ -115,13 +115,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +
                 COLUMN_PHOTO_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_FIRST_NAME + STM_TEXT + STM_NOT_NULL +
-                COLUMN_LAST_NAME + STM_TEXT + STM_NOT_NULL +
+                COLUMN_LAST_NAME + STM_TEXT + ", " +
                 STM_FOREIGN_KEY + " ( " + COLUMN_PHOTO_ID + " ) " + STM_REFERENCES + TABLE_PHOTOS + " (" + COLUMN_ID + " ) "
                 + ");";
 
         String CREATE_TABLE_TIPS = STM_CREATE_TABLE + TABLE_TIPS + " ( " +
                 COLUMN_ID + STM_TEXT_PRIMARY_KEY + ", " +
-                COLUMN_PHOTO_ID + STM_TEXT + STM_NOT_NULL +
+                COLUMN_PHOTO_ID + STM_TEXT + ", " +
                 COLUMN_VENUE_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_AUTHOR_ID + STM_TEXT + STM_NOT_NULL +
                 COLUMN_TIP_TEXT + STM_TEXT + STM_NOT_NULL +

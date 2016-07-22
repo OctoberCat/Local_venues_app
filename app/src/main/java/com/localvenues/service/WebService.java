@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.localvenues.database.DBDataSource;
 import com.localvenues.eventBus.OttoBus;
+import com.localvenues.eventBus.TipsPreparedEvent;
 import com.localvenues.eventBus.VenuesPreparedEvent;
 import com.localvenues.model.tipResponse.TipsResponse;
 import com.localvenues.model.venueResponse.ExploreResponse;
@@ -86,21 +87,36 @@ public class WebService extends Service {
 
     private void handleFetchTips(Intent intent) {
         final String venueId = intent.getStringExtra(EXTRAS_VENUEID);
+
+        final HashMap<String, String> parameters = new HashMap<>();
+
+        parameters.put("client_secret", "WHAEHHOIJ0A2MARVSA3MEY13EVY1ZRWBJK3FWTAEKVD43FTH");
+        parameters.put("client_id", "KZ0IATCNQRWPHXGXPIQQJ3F0QWW3B1CHOGHWH22BQMVTYZDI");
+        parameters.put("v", "20160215");
+        parameters.put("sort", "recent");
+        parameters.put("limit", "10");
+
         executor.submit(new Runnable() {
             @Override
             public void run() {
                 try {
                     ApiRequests client = RESTClient.createRetrofitClient(ApiRequests.class);
-                    Call<TipsResponse> call = client.fetchVenueTips(venueId);
+                    Call<TipsResponse> call = client.fetchVenueTips(venueId, parameters);
                     tipsResponse = call.execute().body();
                     /////////////////
                     Log.i(LOG_TAG, " Check tips response is null:" + (tipsResponse == null));
                     Log.i(LOG_TAG, "tip count: " + tipsResponse.getResponse().getTips().getCount());
                     if (tipsResponse.getResponse().getTips().getCount() != 0) {
                         Log.i(LOG_TAG, "tip first tip text: " + tipsResponse.getResponse().getTips().getItems().get(0).getText());
+                        DBDataSource dataSource = new DBDataSource(getApplicationContext());
+                        dataSource.open();
+                        dataSource.saveTipsList(tipsResponse.getResponse().getTips().getItems(), venueId);
+                        dataSource.close();
+                        OttoBus.getInstance().post(new TipsPreparedEvent());
                     }
                     ////////////////
                 } catch (IOException e) {
+                    Log.i(LOG_TAG, "Exception during fetching tips");
                     e.printStackTrace();
                 }
             }

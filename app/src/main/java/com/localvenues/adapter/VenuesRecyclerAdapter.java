@@ -1,6 +1,7 @@
 package com.localvenues.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.localvenues.R;
 import com.localvenues.model.venueResponse.Venue;
+import com.localvenues.ui.activity.DetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -29,26 +31,27 @@ public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAd
         this.venueList = venueList;
     }
 
+    private static final String LOG_TAG = VenuesRecyclerAdapter.class.getSimpleName();
+
     @Override
 
     public VenuesRecyclerAdapter.VenueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-
         return new VenueViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(VenuesRecyclerAdapter.VenueViewHolder holder, int position) {
-        Venue venue = venueList.get(position);
-        String url = venue.getFeaturedPhotos().getItems().get(0).getPrefix()
+        holder.venue = venueList.get(position);
+        String url = holder.venue.getFeaturedPhotos().getItems().get(0).getPrefix()
                 + "100x100" +
-                venue.getFeaturedPhotos().getItems().get(0).getSuffix();
+                holder.venue.getFeaturedPhotos().getItems().get(0).getSuffix();
         Uri uri = Uri.parse(url);
-        String color = "#" + venue.getRatingColor();
-        holder.venueName.setText(venue.getName());
-        holder.phone.setText(venue.getContact().getFormattedPhone());
-        holder.address.setText(venue.getLocation().getAddress());
-        holder.rating.setText(venue.getRating().toString());
+        String color = "#" + holder.venue.getRatingColor();
+        holder.venueName.setText(holder.venue.getName());
+        holder.phone.setText(holder.venue.getContact().getFormattedPhone());
+        holder.address.setText(holder.venue.getLocation().getAddress());
+        holder.rating.setText(holder.venue.getRating().toString());
         //
         holder.rating.setTextColor(Color.parseColor(color));
         //
@@ -63,14 +66,14 @@ public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAd
     }
 
     public void updateData(List<Venue> venues) {
-        Log.i("updateData", "WOW I'M UPDATED");
         venueList.clear();
         venueList.addAll(venues);
         notifyDataSetChanged();
+        Log.i(LOG_TAG, "WOW I'M UPDATED");
     }
 
 
-    public class VenueViewHolder extends RecyclerView.ViewHolder {
+    public class VenueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.photo)
         ImageView photo;
         @Bind(R.id.venue_name)
@@ -82,11 +85,31 @@ public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAd
         @Bind(R.id.rating)
         TextView rating;
 
+        Venue venue;
+
+        private final String TAG = VenueViewHolder.class.getSimpleName();
+
         public VenueViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+
+/*            itemView.setOnClickListener(
+                    v -> {
+                Log.i(TAG, "VenueViewHolder: Retrolambda is alive!  ");
+                Log.i(TAG, "VenueViewHolder: venue name:" + venue.getName());
+            });*/
 
 
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            Log.i(TAG, "VenueViewHolder: venue name:" + venue.getName());
+            Intent intent = new Intent(v.getContext(), DetailsActivity.class);
+            intent.putExtra(DetailsActivity.DETAILS_KEY, venue.getId());
+            v.getContext().startActivity(intent);
         }
     }
 }

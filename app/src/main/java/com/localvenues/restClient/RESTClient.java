@@ -5,13 +5,13 @@ import com.squareup.okhttp.OkHttpClient;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
-/**
- * Created by valentyn on 26.05.16.
+/*
+ * Created by OctoberCat on 26.05.16.
  */
 public class RESTClient {
 
     private static ApiRequests apiRequests;
-    public static final String API_ENDPOINT = "https://api.foursquare.com/v2/venues/";
+    public static final String API_ENDPOINT = "https://api.foursquare.com/";
     private static OkHttpClient okHttpClient = new OkHttpClient();
 
     private static Retrofit.Builder builder = new Retrofit.Builder()
