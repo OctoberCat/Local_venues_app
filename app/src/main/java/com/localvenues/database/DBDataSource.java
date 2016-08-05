@@ -25,10 +25,10 @@ import java.util.List;
  */
 public class DBDataSource {
 
+    private static long IdCount = 0;
+    private final String LOG_TAG = DBDataSource.class.getSimpleName();
     private SQLiteDatabase database;
     private DBHelper dbHelper;
-    private final String LOG_TAG = DBDataSource.class.getSimpleName();
-
     private String[] allColumnsVenues = {
             DBHelper.COLUMN_ID,
             DBHelper.COLUMN_VENUE_NAME,
@@ -37,20 +37,17 @@ public class DBDataSource {
             DBHelper.COLUMN_LOCATION_ID,
             DBHelper.COLUMN_PHOTO_ID,
             DBHelper.COLUMN_PHONE};
-
     private String[] allColumnsLocation = {
             DBHelper.COLUMN_ID,
             DBHelper.COLUMN_ADDRESS,
             DBHelper.COLUMN_LAT,
             DBHelper.COLUMN_LNG
     };
-
     private String[] allColumnsPhoto = {
             DBHelper.COLUMN_ID,
             DBHelper.COLUMN_PREFIX,
             DBHelper.COLUMN_SUFFIX
     };
-
     private String[] allColumnsTips = {
             DBHelper.COLUMN_ID,
             DBHelper.COLUMN_PHOTO_ID,
@@ -58,15 +55,12 @@ public class DBDataSource {
             DBHelper.COLUMN_AUTHOR_ID,
             DBHelper.COLUMN_TIP_TEXT
     };
-
     private String[] allColumnsUsers = {
             DBHelper.COLUMN_ID,
             DBHelper.COLUMN_PHOTO_ID,
             DBHelper.COLUMN_FIRST_NAME,
             DBHelper.COLUMN_LAST_NAME
     };
-
-    private static long IdCount = 0;
 
     public DBDataSource(Context context) {
         dbHelper = DBHelper.getInstance(context);
@@ -90,8 +84,8 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_LOCATION_ID, saveLocation(venue.getLocation()));
         values.put(DBHelper.COLUMN_PHOTO_ID, savePhoto(venue.getFeaturedPhotos().getItems().get(0)));
 
-        long insertResp = database.insertWithOnConflict(DBHelper.TABLE_VENUES, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.i(LOG_TAG, "inserting venue response " + insertResp);
+        database.insertWithOnConflict(DBHelper.TABLE_VENUES, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        //Log.i(LOG_TAG, "inserting venue response " + insertResp);
     }
 
     public void saveVenueList(List<Item> itemList) {
@@ -128,10 +122,10 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_ADDRESS, location.getAddress());
         values.put(DBHelper.COLUMN_LNG, location.getLng());
         values.put(DBHelper.COLUMN_LAT, location.getLat());
-        long insertLocationResp = database.insertWithOnConflict(DBHelper.TABLE_LOCATIONS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.i(LOG_TAG, "inserting location response " + insertLocationResp);
+        //long insertLocationResp =
+        //Log.i(LOG_TAG, "inserting location response " + insertLocationResp);
 
-        return insertLocationResp;
+        return database.insertWithOnConflict(DBHelper.TABLE_LOCATIONS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public String saveAuthor(User user) {
@@ -166,9 +160,9 @@ public class DBDataSource {
             values.put(DBHelper.COLUMN_PHOTO_ID, savePhoto(item.getPhoto()));
         }
 
-        long saveTipResp = database.insertWithOnConflict(DBHelper.TABLE_TIPS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        database.insertWithOnConflict(DBHelper.TABLE_TIPS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
-        Log.i(LOG_TAG, "saveTip: saveTipResp" + saveTipResp);
+        //Log.i(LOG_TAG, "saveTip: saveTipResp" + saveTipResp);
 
 
     }
@@ -217,8 +211,8 @@ public class DBDataSource {
         values.put(DBHelper.COLUMN_PREFIX, item___.getPrefix());
         values.put(DBHelper.COLUMN_SUFFIX, item___.getSuffix());
 
-        long insertPhotoResp = database.insertWithOnConflict(DBHelper.TABLE_PHOTOS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.i(LOG_TAG, "inserting photo response " + insertPhotoResp);
+        database.insertWithOnConflict(DBHelper.TABLE_PHOTOS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        // Log.i(LOG_TAG, "inserting photo response " + insertPhotoResp);
         return item___.getId();
     }
 

@@ -27,13 +27,11 @@ import butterknife.ButterKnife;
 
 public class ListFragment extends Fragment {
 
+    private final String LOG_TAG = ListFragment.class.getSimpleName();
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-
     private VenuesRecyclerAdapter adapter;
     private List<Venue> venues = new ArrayList<>();
-
-    private final String LOG_TAG = ListFragment.class.getSimpleName();
 
     public ListFragment() {
         // Required empty public constructor
@@ -94,6 +92,8 @@ public class ListFragment extends Fragment {
     @Subscribe
     public void displayExploredVenues(VenuesPreparedEvent venuesPreparedEvent) {
         Log.i(LOG_TAG, " event from service received");
+        Log.i(LOG_TAG, " event from service received, thread: " + Thread.currentThread().getName());
+
         DBDataSource dataSource = new DBDataSource(getActivity());
         dataSource.open();
         venues = dataSource.getAllVenues();

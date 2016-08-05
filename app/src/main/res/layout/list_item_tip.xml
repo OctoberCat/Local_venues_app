@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@color/textColorPrimary">
+    android:background="@color/colorPrimary">
 <ImageView
     android:id="@+id/author_photo"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@mipmap/ic_launcher"
+    android:layout_alignParentLeft="true"
     android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"/>
+    android:src="@mipmap/ic_launcher" />
     <TextView
         android:id="@+id/author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jason Statham"
-        android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/author_photo"
+        android:text="@string/author_name_sample"
         android:textSize="15sp"
-        android:textStyle="italic"
-        android:layout_toRightOf="@id/author_photo"/>
+        android:textStyle="italic" />
     <TextView
         android:id="@+id/tip_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/author_name"
         android:layout_marginLeft="5dp"
-        android:text="Прекрасное место, очень вкусный кофе! Есть возможность поиграть в игры детства прямо в центре города! И еще когда дают сдачу на 2-х гривнах печать оленя)"
         android:layout_toRightOf="@id/author_photo"
-        android:layout_below="@id/author_name"/>
+        android:text="@string/tip_sample" />
 </RelativeLayout>

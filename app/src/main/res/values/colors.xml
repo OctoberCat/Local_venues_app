@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--status bar and contextual bars-->
-    <color name="colorPrimaryDark">#6f0303</color>
-    <color name="colorPrimary">#f44336</color>
-    <color name="textColorPrimary">#b71c1c</color>
-    <color name="windowBackground">#c51162</color>
-
+    <color name="colorPrimaryDark">#bf360c</color>
+    <color name="colorPrimary">#e64a19</color>
+    <color name="textColorPrimary">#ffccbc</color>
+    <color name="windowBackground">#ffccbc</color>
+    <color name="cardBackground">#795548</color>
     <!--duh, seems doesn't work-->
     <!--<color name="navigationBarColor">#000000</color>-->
 

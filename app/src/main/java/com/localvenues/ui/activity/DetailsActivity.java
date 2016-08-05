@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.localvenues.R;
+import com.localvenues.adapter.DividerItemDecoration;
 import com.localvenues.adapter.TipsRecyclerAdapter;
 import com.localvenues.database.DBDataSource;
 import com.localvenues.eventBus.OttoBus;
@@ -24,47 +25,47 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DetailsActivity extends AppCompatActivity {
-    @Bind(R.id.details_toolbar)
-    Toolbar toolbar;
-
-    @Bind(R.id.recyclerTips)
-    RecyclerView recyclerView;
-
-    private TipsRecyclerAdapter adapter;
-    private List<Item> tipsList;
-    private String venueID;
-
     public static final String DETAILS_KEY = "tips";
     private static final String LOG_TAG = DetailsActivity.class.getSimpleName();
+    @Bind(R.id.details_toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.recyclerTips)
+    RecyclerView recyclerView;
+    private TipsRecyclerAdapter adapter;
+    private List<Item> tipsList;
+    private String venueId;
+    private LinearLayoutManager layoutManager;
+    private DBDataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
-
-        //setting layout manager
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        DBDataSource dataSource = new DBDataSource(this);
-
+        dataSource = new DBDataSource(this);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        venueID = intent.getStringExtra(DETAILS_KEY);
-        Log.i(LOG_TAG, "onCreate: " + venueID);
+        venueId = intent.getStringExtra(DETAILS_KEY);
+        Log.i(LOG_TAG, "onCreate: " + venueId);
+
         Log.i(LOG_TAG, "Starting tips webservice");
-        WebService.fetchTips(this, venueID);
+        WebService.fetchTips(this, venueId);
         //
         dataSource.open();
-        Venue venue = dataSource.getRelevantVenue(venueID);
-        tipsList = dataSource.getAllRelevantTips(venueID);
+        Venue venue = dataSource.getRelevantVenue(venueId);
+        tipsList = dataSource.getAllRelevantTips(venueId);
         dataSource.close();
         //
         getSupportActionBar().setTitle(venue.getName());
+
         Log.i(LOG_TAG, "onCreate: tipsList is empty: " + tipsList.isEmpty());
+        //setting layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new TipsRecyclerAdapter(tipsList);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, null);
+        recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setAdapter(adapter);
 
     }
@@ -84,9 +85,9 @@ public class DetailsActivity extends AppCompatActivity {
     @Subscribe
     public void displayFetchedTips(TipsPreparedEvent event) {
         Log.i(LOG_TAG, "displayFetchedTips: event from service received ");
-        DBDataSource dataSource = new DBDataSource(this);
+
         dataSource.open();
-        tipsList = dataSource.getAllRelevantTips(venueID);
+        tipsList = dataSource.getAllRelevantTips(venueId);
         dataSource.close();
         Log.i(LOG_TAG, "displayFetchedTips: tipsList is empty: " + tipsList.isEmpty());
 

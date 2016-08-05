@@ -24,30 +24,20 @@ import retrofit.Call;
 
 public class WebService extends Service {
 
-    private final String LOG_TAG = WebService.class.getSimpleName();
-
     public static final String ACTION_EXPLORE_VENUES = "explore_venues";
     public static final String EXTRAS_LL = "ll";
     public static final String EXTRAS_RADIUS = "radius";
     public static final String EXTRAS_LIMIT = "limit";
     public static final String EXTRAS_OFFSET = "offset";
-
     public static final String ACTION_FETCH_TIPS = "fetch_tips";
     public static final String EXTRAS_VENUEID = "venueId";
-
-
+    private final String LOG_TAG = WebService.class.getSimpleName();
+    HashMap<String, String> parametersMap;
     private ExecutorService executor;
     private TipsResponse tipsResponse;
     private ExploreResponse exploreResponse;
-    HashMap<String, String> parametersMap;
 
     public WebService() {
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        executor = Executors.newCachedThreadPool();
     }
 
     public static void exploreVenues(Context context, String ll, String radius,
@@ -66,6 +56,12 @@ public class WebService extends Service {
         intent.setAction(ACTION_FETCH_TIPS);
         intent.putExtra(EXTRAS_VENUEID, venueId);
         context.startService(intent);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        executor = Executors.newCachedThreadPool();
     }
 
     @Override
@@ -112,7 +108,7 @@ public class WebService extends Service {
                         dataSource.open();
                         dataSource.saveTipsList(tipsResponse.getResponse().getTips().getItems(), venueId);
                         dataSource.close();
-                        OttoBus.getInstance().post(new TipsPreparedEvent());
+                        OttoBus.postOnMain(new TipsPreparedEvent());
                     }
                     ////////////////
                 } catch (IOException e) {
@@ -156,7 +152,7 @@ public class WebService extends Service {
                         dbDataSource.open();
                         dbDataSource.saveVenueList(exploreResponse.getResponse().getGroups().get(0).getItems());
                         dbDataSource.close();
-                        OttoBus.getInstance().post(new VenuesPreparedEvent());
+                        OttoBus.postOnMain(new VenuesPreparedEvent());
                     }
 
                 } catch (IOException e) {

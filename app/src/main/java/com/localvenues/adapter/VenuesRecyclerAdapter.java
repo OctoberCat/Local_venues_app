@@ -25,13 +25,12 @@ import butterknife.ButterKnife;
 
 public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAdapter.VenueViewHolder> {
 
+    private static final String LOG_TAG = VenuesRecyclerAdapter.class.getSimpleName();
     private List<Venue> venueList;
 
     public VenuesRecyclerAdapter(List<Venue> venueList) {
         this.venueList = venueList;
     }
-
-    private static final String LOG_TAG = VenuesRecyclerAdapter.class.getSimpleName();
 
     @Override
 
@@ -53,7 +52,7 @@ public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAd
         holder.address.setText(holder.venue.getLocation().getAddress());
         holder.rating.setText(holder.venue.getRating().toString());
         //
-        holder.rating.setTextColor(Color.parseColor(color));
+        holder.rating.setBackgroundColor(Color.parseColor(color));
         //
         Context context = holder.photo.getContext();
         Picasso.with(context).load(uri).into(holder
@@ -74,6 +73,7 @@ public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAd
 
 
     public class VenueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final String TAG = VenueViewHolder.class.getSimpleName();
         @Bind(R.id.photo)
         ImageView photo;
         @Bind(R.id.venue_name)
@@ -84,10 +84,7 @@ public class VenuesRecyclerAdapter extends RecyclerView.Adapter<VenuesRecyclerAd
         TextView address;
         @Bind(R.id.rating)
         TextView rating;
-
         Venue venue;
-
-        private final String TAG = VenueViewHolder.class.getSimpleName();
 
         public VenueViewHolder(View itemView) {
             super(itemView);
