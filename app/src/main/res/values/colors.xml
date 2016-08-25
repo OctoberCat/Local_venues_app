@@ -5,7 +5,7 @@
     <color name="colorPrimary">#e64a19</color>
     <color name="textColorPrimary">#ffccbc</color>
     <color name="windowBackground">#ffccbc</color>
-    <color name="cardBackground">#795548</color>
+    <color name="cardBackground">#e64a19</color>
     <!--duh, seems doesn't work-->
     <!--<color name="navigationBarColor">#000000</color>-->
 

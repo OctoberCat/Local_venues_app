@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.localvenues.ui.fragment.ListFragment;
 import com.localvenues.ui.fragment.MapFragment;
 
-/**
- * Created by valentyn on 10.04.16.
+/*
+ * Created by OctoberCat on 10.04.16.
  */
 public class PagerAdapter extends FragmentPagerAdapter {
 
