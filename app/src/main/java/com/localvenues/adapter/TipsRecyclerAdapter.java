@@ -38,11 +38,12 @@ public class TipsRecyclerAdapter extends RecyclerView.Adapter<TipsRecyclerAdapte
     public void onBindViewHolder(TipViewHolder holder, int position) {
         holder.tip = tipsList.get(position);
         String fullName;
-        if (holder.tip.getUser().getLastName().isEmpty()) {
+        /*if (holder.tip.getUser().getLastName().equals(null)) {
             fullName = holder.tip.getUser().getFirstName();
         } else {
             fullName = holder.tip.getUser().getFirstName() + " " + holder.tip.getUser().getLastName();
-        }
+        }*/
+        fullName = holder.tip.getUser().getFirstName() + " " + holder.tip.getUser().getLastName();
         holder.authorName.setText(fullName);
         String userPhotoUrl = holder.tip.getUser().getPhoto().getPrefix() + "100x100" + holder.tip.getUser().getPhoto().getSuffix();
         Uri uri = Uri.parse(userPhotoUrl);
